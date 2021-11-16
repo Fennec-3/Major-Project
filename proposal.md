@@ -2,16 +2,16 @@
 
 ## Description
 
-Here I will describe what im going to bulid...
+I would like to make a cookie clicker replica game
 
 ## Must Have List
 
--first thing
--second thing
--etc
+-functioning cookie and shop
+-upgrades that can be bought from shop
+-displays the number of cookies someone has as well as their cookies per second
 
 ## Nice to Have List
 
--more stuff
--other stuff
--etc
+-Schellenberg mode (cheat mode)
+-sound effects and music
+-chocolate milk/golden cookies

@@ -8,6 +8,10 @@
 let cookie, shop, upgrade;
 let cookieCounter = 0;
 
+function preLoad() {
+  
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   cookie = new Button(width/2, height/2, 75);
@@ -21,8 +25,7 @@ function draw() {
   shop.display();
   upgrade.display();
 
-  textSize(50);
-  text(cookieCounter, width/2, height/2-200);
+  displayText(width/2, height/2-150, "Cookies: " + cookieCounter, 50);
 }
 
 class Button {
@@ -51,4 +54,10 @@ function mousePressed() {
   if (cookie.mouseDetected()) {
     cookieCounter++;
   }
+}
+
+function displayText(x, y, words, sizeOfText) {
+  textAlign(CENTER, CENTER);
+  textSize(sizeOfText);
+  text(words, x, y);
 }

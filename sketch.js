@@ -5,40 +5,43 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let cookie, shop, upgrade;
+let cookie, shop, upgrade, cookieImg;
 let cookieCounter = 0;
 
-function preLoad() {
-  
+function preload() {
+  cookieImg = loadImage("assets/pixil-frame-0.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  cookie = new Button(width/2, height/2, 75);
-  shop = new Button(width-50, 50, 40);
-  upgrade = new Button(width-50, 160, 40);
+  cookie = new Button(width/2, height/2, cookieImg);
+  // shop = new Button(width-50, 50, 40);
+  // upgrade = new Button(width-50, 160, 40);
 }
 
 function draw() {
   background(220);
   cookie.display();
-  shop.display();
-  upgrade.display();
+  // shop.display();
+  // upgrade.display();
 
   displayText(width/2, height/2-150, "Cookies: " + cookieCounter, 50);
 }
 
 class Button {
-  constructor(x, y, r) {
+  constructor(x, y, theImage) {
     this.x = x;
     this.y = y;
-    this.radius = r;
-    // this.image = theImage;
+    this.radius = theImage.width/2;
+    this.image = theImage;
+    this.image.resize(width/3, width/3);
   }
 
   display() {
-    fill("blue");
-    circle(this.x, this.y, this.radius*2);
+    imageMode(CENTER);
+    circle(this.x, this.y, 200);
+    image(this.image, this.x, this.y);
+    
   }
 
   mouseDetected() {

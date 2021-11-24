@@ -4,44 +4,44 @@
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
+//
+//resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
 let cookie, shop, upgrade, cookieImg;
 let cookieCounter = 0;
 
 function preload() {
-  cookieImg = loadImage("assets/pixil-frame-0.png");
+  cookieImg = loadImage("assets/pixil-frame-0 (1).png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   cookie = new Button(width/2, height/2, cookieImg);
-  // shop = new Button(width-50, 50, 40);
-  // upgrade = new Button(width-50, 160, 40);
+  // shop = new Button(width-50, 50);
+  // upgrade = new Button(width-50, 160);
 }
 
 function draw() {
-  background(220);
+  background(0, 20, 255);
   cookie.display();
   // shop.display();
   // upgrade.display();
 
-  displayText(width/2, height/2-150, "Cookies: " + cookieCounter, 50);
+  displayText(width/2, cookie.y-cookie.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/12);
 }
 
 class Button {
   constructor(x, y, theImage) {
     this.x = x;
     this.y = y;
-    this.radius = theImage.width/2;
     this.image = theImage;
-    this.image.resize(width/3, width/3);
+    this.image.resizeNN(min(height, width)/3, min(height, width)/3);
+    this.radius = theImage.width/2;
   }
 
   display() {
     imageMode(CENTER);
-    circle(this.x, this.y, 200);
     image(this.image, this.x, this.y);
-    
   }
 
   mouseDetected() {

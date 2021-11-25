@@ -22,12 +22,12 @@ function setup() {
 }
 
 function draw() {
-  background(0, 20, 255);
+  background(15, 155, 219);
   cookie.display();
   // shop.display();
   // upgrade.display();
 
-  displayText(width/2, cookie.y-cookie.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/12);
+  displayText(width/2, cookie.y-cookie.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14);
 }
 
 class Button {
@@ -35,13 +35,21 @@ class Button {
     this.x = x;
     this.y = y;
     this.image = theImage;
+    this.theClickedImage = theImage;
     this.image.resizeNN(min(height, width)/3, min(height, width)/3);
+    this.theClickedImage.resizeNN(min(height, width)/3-10, min(height, width)/3-10);
     this.radius = theImage.width/2;
+    this.clickTime = 0;
   }
 
   display() {
     imageMode(CENTER);
-    image(this.image, this.x, this.y);
+    if (millis() < this.clickTime + 100) {
+      image(this.theClickedImage, this.x, this.y);
+    }
+    else {
+      image(this.image, this.x, this.y);
+    }
   }
 
   mouseDetected() {
@@ -51,11 +59,16 @@ class Button {
       return false;
     }
   }
+
+  buttonPressed() {
+    this.clickTime = millis();
+  }
 }
 
 function mousePressed() {
   if (cookie.mouseDetected()) {
     cookieCounter++;
+    cookie.buttonPressed();
   }
 }
 

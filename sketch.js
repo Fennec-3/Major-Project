@@ -73,6 +73,7 @@ function mousePressed() {
 }
 
 function displayText(x, y, words, sizeOfText) {
+  fill("white");
   textAlign(CENTER, CENTER);
   textSize(sizeOfText);
   text(words, x, y);

@@ -7,24 +7,26 @@
 //
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
-let cookie, shop, upgrade, cookieImg;
+let cookie, shop, upgrade;
+let cookieImg, shopImg;
 let cookieCounter = 0;
 
 function preload() {
-  cookieImg = loadImage("assets/pixil-frame-0 (1).png");
+  cookieImg = loadImage("assets/Cookie.png");
+  shopImg = loadImage("assets/Shop.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   cookie = new Button(width/2, height/2, cookieImg);
-  // shop = new Button(width-50, 50);
+  shop = new Button(width-50, 50, shopImg);
   // upgrade = new Button(width-50, 160);
 }
 
 function draw() {
   background(15, 155, 219);
   cookie.display();
-  // shop.display();
+  shop.display();
   // upgrade.display();
 
   displayText(width/2, cookie.y-cookie.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14);

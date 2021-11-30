@@ -8,19 +8,24 @@
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
 let cookie, shop, upgrade;
-let cookieImg, shopImg;
+let cookieImg, clickedCookie, shopImg;
 let cookieCounter = 0;
 
 function preload() {
   cookieImg = loadImage("assets/Cookie.png");
+  clickedCookie = loadImage("assets/Cookie.png");
   shopImg = loadImage("assets/Shop.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  cookie = new Button(width/2, height/2, cookieImg);
+  cookieImg.resizeNN(min(height, width)/3, min(height, width)/3);
+  clickedCookie.resizeNN(min(height, width)/3-10, min(height, width)/3-10);
+
+  cookie = new Button(width/2, height/2, cookieImg, clickedCookie);
   shop = new Button(width-50, 50, shopImg);
   // upgrade = new Button(width-50, 160);
+
 }
 
 function draw() {
@@ -33,21 +38,20 @@ function draw() {
 }
 
 class Button {
-  constructor(x, y, theImage) {
+  constructor(x, y, theImage, clickedImage) {
     this.x = x;
     this.y = y;
     this.image = theImage;
-    this.theClickedImage = theImage;
-    this.image.resizeNN(min(height, width)/3, min(height, width)/3);
-    this.theClickedImage.resizeNN(min(height, width)/3-10, min(height, width)/3-10);
+    this.theClickedImage = clickedImage;
     this.radius = theImage.width/2;
-    this.clickTime = 0;
+    this.clickTime;
   }
 
   display() {
     imageMode(CENTER);
     if (millis() < this.clickTime + 100) {
       image(this.theClickedImage, this.x, this.y);
+      console.log("hi");
     }
     else {
       image(this.image, this.x, this.y);

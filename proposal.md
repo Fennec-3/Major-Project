@@ -16,3 +16,4 @@ I would like to make a cookie clicker replica game
 
 -Schellenberg mode (cheat mode)
 -milk/chocolate milk/golden cookies
+-scaling prices

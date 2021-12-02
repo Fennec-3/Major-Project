@@ -8,36 +8,37 @@
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
 let cookie, shop, upgrade;
-let cookieImg, clickedCookie, shopImg;
+let cookieImage, clickedCookieImage, shopImage, clickedShopImage;
 let cookieCounter = 0;
 let minHW, shopHeight, shopWidth;
 let isShop = false;
+let isUpgrade = false;
 
-function preload() {
-  cookieImg = loadImage("assets/Cookie.png");
-  clickedCookie = loadImage("assets/Cookie.png");
-  shopImg = loadImage("assets/Shop.png");
-  clickedShop = loadImage("assets/Shop.png");
+function preload() { //loads images
+  cookieImage = loadImage("assets/Cookie.png");
+  clickedCookieImage = loadImage("assets/Cookie.png");
+  shopImage = loadImage("assets/Shop.png");
+  clickedShopImage = loadImage("assets/Shop.png");
 }
 
-function setup() {
+function setup() { //resizes images, sets buttons, and sets shop size
   createCanvas(windowWidth, windowHeight);
   minHW = min(height, width);
   shopWidth = width/5;
   shopHeight = height/1.5;
 
-  cookieImg.resizeNN(minHW/3, minHW/3);
-  clickedCookie.resizeNN(minHW/3-10, minHW/3-10);
-  shopImg.resizeNN(minHW/8, minHW/8);
-  clickedShop.resizeNN(minHW/8-10, minHW/8-10);
+  cookieImage.resizeNN(minHW/3, minHW/3);
+  clickedCookieImage.resizeNN(minHW/3-10, minHW/3-10);
+  shopImage.resizeNN(minHW/8, minHW/8);
+  clickedShopImage.resizeNN(minHW/8-10, minHW/8-10);
 
-  cookie = new Button(width/2, height/2, cookieImg, clickedCookie);
-  shop = new Button(width-50, 50, shopImg, clickedShop);
+  cookie = new Button(width/2, height/2, cookieImage, clickedCookieImage);
+  shop = new Button(width-50, 50, shopImage, clickedShopImage);
   // upgrade = new Button(width-50, 160);
 
 }
 
-function draw() {
+function draw() { //displays buttons and text
   background(15, 155, 219);
   cookie.display();
   shop.display();
@@ -47,7 +48,7 @@ function draw() {
   showShop();
 }
 
-class Button {
+class Button { //class for all the buttons
   constructor(x, y, theImage, clickedImage) {
     this.x = x;
     this.y = y;
@@ -81,7 +82,7 @@ class Button {
   }
 }
 
-function mousePressed() {
+function mousePressed() { //what happens when you interact with the buttons
   if (cookie.mouseDetected()) {
     cookieCounter++;
     cookie.buttonPressed();
@@ -89,10 +90,11 @@ function mousePressed() {
   if (shop.mouseDetected()) {
     shop.buttonPressed();
     isShop = !isShop;
+    isUpgrade = false;
   }
 }
 
-function displayText(x, y, words, sizeOfText) {
+function displayText(x, y, words, sizeOfText) { //displays text
   fill("white");
   strokeWeight(0);
   textAlign(CENTER, CENTER);
@@ -100,11 +102,10 @@ function displayText(x, y, words, sizeOfText) {
   text(words, x, y);
 }
 
-function showShop() {
+function showShop() { //displays shop when button is pressed
   if (isShop === true) {
-    strokeWeight(5);
+    strokeWeight(8);
     stroke(220);
     rect(10, 10, shopWidth, shopHeight);
   }
-
 }

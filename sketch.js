@@ -13,6 +13,7 @@ let cookieCounter = 0;
 let minHW, shopHeight, shopWidth;
 let isShop = false;
 let isUpgrade = false;
+let shopLocation = 10;
 
 function preload() { //loads images
   cookieImage = loadImage("assets/Cookie.png");
@@ -62,7 +63,6 @@ class Button { //class for all the buttons
     imageMode(CENTER);
     if (millis() < this.clickTime + 100) {
       image(this.theClickedImage, this.x, this.y);
-      console.log("hi");
     }
     else {
       image(this.image, this.x, this.y);
@@ -71,6 +71,39 @@ class Button { //class for all the buttons
 
   mouseDetected() {
     if (mouseX > this.x - this.radius && mouseX < this.x + this.radius && mouseY > this.y - this.radius && mouseY < this.y + this.radius) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  buttonPressed() {
+    this.clickTime = millis();
+  }
+}
+
+class SquareButton {
+  constructor(x, y, theImage, clickedImage, buttonWidth, buttonHeight) {
+    this.x = x - x/2;
+    this.y = y - y/2;
+    this.image = theImage;
+    this.theClickedImage = clickedImage;
+    this.buttonWidth = buttonWidth;
+    this.buttonHeight = buttonHeight;
+    this.clickTime;
+  }
+
+  display() {
+    if (millis() < this.clickTime + 100) {
+      image(this.theClickedImage, this.x, this.y);
+    }
+    else {
+      image(this.image, this.x, this.y);
+    }
+  }
+
+  mouseDetected() {
+    if (mouseX < this.x + this.buttonWidth && mouseX > this.x && mouseY > this.y && mouseY < this.y + this.buttonHeight) {
       return true;
     } else {
       return false;
@@ -104,8 +137,12 @@ function displayText(x, y, words, sizeOfText) { //displays text
 
 function showShop() { //displays shop when button is pressed
   if (isShop === true) {
-    strokeWeight(8);
+    strokeWeight(10);
     stroke(220);
-    rect(10, 10, shopWidth, shopHeight);
+    rect(shopLocation, shopLocation, shopWidth, shopHeight);
+    strokeWeight(2);
+    for (let i=0; i<shopHeight; i+=shopHeight/8) {
+      rect(shopLocation, shopLocation+i, shopWidth, shopHeight/8);
+    }
   }
 }

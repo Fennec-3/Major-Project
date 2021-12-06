@@ -8,7 +8,7 @@
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
 let cookie, shop, upgrade;
-let cookieImage, clickedCookieImage, shopImage, clickedShopImage;
+let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage;
 let cookieCounter = 0;
 let minHW, shopHeight, shopWidth;
 let isShop = false;
@@ -20,6 +20,7 @@ function preload() { //loads images
   clickedCookieImage = loadImage("assets/Cookie.png");
   shopImage = loadImage("assets/Shop.png");
   clickedShopImage = loadImage("assets/Shop.png");
+  buyImage = loadImage("assets/Buy Button.png");
 }
 
 function setup() { //resizes images, sets buttons, and sets shop size
@@ -33,8 +34,8 @@ function setup() { //resizes images, sets buttons, and sets shop size
   shopImage.resizeNN(minHW/8, minHW/8);
   clickedShopImage.resizeNN(minHW/8-10, minHW/8-10);
 
-  cookie = new Button(width/2, height/2, cookieImage, clickedCookieImage);
-  shop = new Button(width-50, 50, shopImage, clickedShopImage);
+  cookie = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
+  shop = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   // upgrade = new Button(width-50, 160);
 
 }
@@ -49,13 +50,13 @@ function draw() { //displays buttons and text
   showShop();
 }
 
-class Button { //class for all the buttons
+class CircleButton { //class for all the buttons
   constructor(x, y, theImage, clickedImage) {
     this.x = x;
     this.y = y;
     this.image = theImage;
     this.theClickedImage = clickedImage;
-    this.radius = theImage.width/2;
+    this.radius = max(theImage.width/2, theImage.height/2);
     this.clickTime;
   }
 
@@ -82,40 +83,28 @@ class Button { //class for all the buttons
   }
 }
 
-class SquareButton {
+class SquareButton extends CircleButton {
   constructor(x, y, theImage, clickedImage, buttonWidth, buttonHeight) {
-    this.x = x - x/2;
-    this.y = y - y/2;
+    super(x, y, theImage, clickedImage);
+    this.x = x;
+    this.y = y;
     this.image = theImage;
     this.theClickedImage = clickedImage;
-    this.buttonWidth = buttonWidth;
-    this.buttonHeight = buttonHeight;
+    this.buttonWidth = buttonWidth/2;
+    this.buttonHeight = buttonHeight/2;
     this.clickTime;
   }
 
-  display() {
-    if (millis() < this.clickTime + 100) {
-      image(this.theClickedImage, this.x, this.y);
-    }
-    else {
-      image(this.image, this.x, this.y);
-    }
-  }
-
   mouseDetected() {
-    if (mouseX < this.x + this.buttonWidth && mouseX > this.x && mouseY > this.y && mouseY < this.y + this.buttonHeight) {
+    if (mouseX < this.x + this.buttonWidth && mouseX > this.x - this.buttonWidth && mouseY > this.y - this.buttonHeight && mouseY < this.y + this.buttonHeight) {
       return true;
     } else {
       return false;
     }
   }
-
-  buttonPressed() {
-    this.clickTime = millis();
-  }
 }
 
-function mousePressed() { //what happens when you interact with the buttons
+function mousePressed() { //this determines what happens when you interact with the buttons
   if (cookie.mouseDetected()) {
     cookieCounter++;
     cookie.buttonPressed();
@@ -143,6 +132,7 @@ function showShop() { //displays shop when button is pressed
     strokeWeight(2);
     for (let i=0; i<shopHeight; i+=shopHeight/8) {
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/8);
+      SquareButton(shopWidth-10, i, )
     }
   }
 }

@@ -7,7 +7,7 @@
 //
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
-let cookieButton, shopButton, upgradeButton, buyButton;
+let cookieButton, shopButton, upgradeButton;
 let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage;
 let cookieCounter = 0;
 let minHW, shopHeight, shopWidth;
@@ -39,6 +39,7 @@ function setup() { //resizes images, sets buttons, and sets shop size
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   // upgrade = new Button(width-50, 160);
 
+  buyButtonSetup();
 }
 
 function draw() { //displays buttons and text
@@ -47,7 +48,7 @@ function draw() { //displays buttons and text
   shopButton.display();
   // upgrade.display();
 
-  displayText(width/2, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14);
+  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14);
   showShop();
 }
 
@@ -119,7 +120,8 @@ function mousePressed() { //this determines what happens when you interact with 
 
 function buyButtonSetup() {
   for (let i=0; i<shopHeight; i+=shopHeight/8) {
-    
+    let buyButton = new SquareButton(shopWidth-10, i+shopHeight/8, buyImage, buyImage, buyImage.width, buyImage.height);
+    buyButtonArray.push(buyButton);
   }
 }
 
@@ -139,7 +141,7 @@ function showShop() { //displays shop when button is pressed
     strokeWeight(2);
     for (let i=0; i<shopHeight; i+=shopHeight/8) {
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/8);
-      buyButton = new SquareButton(shopWidth-10, i, buyImage, buyImage, buyImage.width, buyImage.height);
+      buyButtonArray[floor(i/(shopHeight/8))].display();
     }
   }
 }

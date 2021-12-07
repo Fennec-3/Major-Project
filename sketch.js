@@ -7,13 +7,14 @@
 //
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
-let cookie, shop, upgrade;
+let cookieButton, shopButton, upgradeButton, buyButton;
 let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage;
 let cookieCounter = 0;
 let minHW, shopHeight, shopWidth;
 let isShop = false;
 let isUpgrade = false;
 let shopLocation = 10;
+let buyButtonArray = [];
 
 function preload() { //loads images
   cookieImage = loadImage("assets/Cookie.png");
@@ -34,19 +35,19 @@ function setup() { //resizes images, sets buttons, and sets shop size
   shopImage.resizeNN(minHW/8, minHW/8);
   clickedShopImage.resizeNN(minHW/8-10, minHW/8-10);
 
-  cookie = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
-  shop = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
+  cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
+  shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   // upgrade = new Button(width-50, 160);
 
 }
 
 function draw() { //displays buttons and text
   background(15, 155, 219);
-  cookie.display();
-  shop.display();
+  cookieButton.display();
+  shopButton.display();
   // upgrade.display();
 
-  displayText(width/2, cookie.y-cookie.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14);
+  displayText(width/2, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14);
   showShop();
 }
 
@@ -105,14 +106,20 @@ class SquareButton extends CircleButton {
 }
 
 function mousePressed() { //this determines what happens when you interact with the buttons
-  if (cookie.mouseDetected()) {
+  if (cookieButton.mouseDetected()) {
     cookieCounter++;
-    cookie.buttonPressed();
+    cookieButton.buttonPressed();
   }
-  if (shop.mouseDetected()) {
-    shop.buttonPressed();
+  if (shopButton.mouseDetected()) {
+    shopButton.buttonPressed();
     isShop = !isShop;
     isUpgrade = false;
+  }
+}
+
+function buyButtonSetup() {
+  for (let i=0; i<shopHeight; i+=shopHeight/8) {
+    
   }
 }
 
@@ -132,7 +139,7 @@ function showShop() { //displays shop when button is pressed
     strokeWeight(2);
     for (let i=0; i<shopHeight; i+=shopHeight/8) {
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/8);
-      SquareButton(shopWidth-10, i, )
+      buyButton = new SquareButton(shopWidth-10, i, buyImage, buyImage, buyImage.width, buyImage.height);
     }
   }
 }

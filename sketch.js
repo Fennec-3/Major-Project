@@ -15,6 +15,7 @@ let isShop = false;
 let isUpgrade = false;
 let shopLocation = 10;
 let buyButtonArray = [];
+let shopTextArray = ["Grandma", "CookieBot 9000", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Pyramid Scheme", "Cookie Laundering"];
 
 function preload() { //loads images
   cookieImage = loadImage("assets/Cookie.png");
@@ -142,6 +143,7 @@ function showShop() { //displays shop when button is pressed
     for (let i=0; i<shopHeight; i+=shopHeight/8) {
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/8);
       buyButtonArray[floor(i/(shopHeight/8))].display();
+      displayText(shopWidth/4, i+shopHeight/16, shopTextArray[i/(shopHeight/16)], 3);
     }
   }
 }

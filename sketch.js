@@ -49,7 +49,7 @@ function draw() { //displays buttons and text
   shopButton.display();
   // upgrade.display();
 
-  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14);
+  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14, "white");
   showShop();
 }
 
@@ -126,8 +126,8 @@ function buyButtonSetup() {
   }
 }
 
-function displayText(x, y, words, sizeOfText) { //displays text
-  fill("white");
+function displayText(x, y, words, sizeOfText, theColor) { //displays text
+  fill(theColor);
   strokeWeight(0);
   textAlign(CENTER, CENTER);
   textSize(sizeOfText);
@@ -141,9 +141,10 @@ function showShop() { //displays shop when button is pressed
     rect(shopLocation, shopLocation, shopWidth, shopHeight);
     strokeWeight(2);
     for (let i=0; i<shopHeight; i+=shopHeight/8) {
+      fill("white");
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/8);
       buyButtonArray[floor(i/(shopHeight/8))].display();
-      displayText(shopWidth/4, i+shopHeight/16, shopTextArray[i/(shopHeight/16)], 3);
+      displayText(shopWidth/4, i+shopHeight/16, shopTextArray[i/(shopHeight/8)], 15, "black");
     }
   }
 }

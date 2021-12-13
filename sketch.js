@@ -15,7 +15,7 @@ let isShop = false;
 let isUpgrade = false;
 let shopLocation = 10;
 let buyButtonArray = [];
-let shopTextArray = ["Grandma", "CookieBot 9000", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Pyramid Scheme", "Cookie Laundering"];
+let shopTextArray = ["CookieBot 9000", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
 
 function preload() { //loads images
   cookieImage = loadImage("assets/Cookie.png");
@@ -29,7 +29,7 @@ function setup() { //resizes images, sets buttons, and sets shop size
   createCanvas(windowWidth, windowHeight);
   minHW = min(height, width);
   shopWidth = width/5;
-  shopHeight = height/1.5;
+  shopHeight = height/1.4;
 
   cookieImage.resizeNN(minHW/3, minHW/3);
   clickedCookieImage.resizeNN(minHW/3-10, minHW/3-10);
@@ -120,18 +120,20 @@ function mousePressed() { //this determines what happens when you interact with 
 }
 
 function buyButtonSetup() {
-  for (let i=0; i<shopHeight; i+=shopHeight/8) {
-    let buyButton = new SquareButton(shopWidth-10, i+shopHeight/8, buyImage, buyImage, buyImage.width, buyImage.height);
+  for (let i=0; i<shopHeight; i+=shopHeight/7) {
+    let buyButton = new SquareButton(shopWidth-10, i+shopHeight/7, buyImage, buyImage, buyImage.width, buyImage.height);
     buyButtonArray.push(buyButton);
   }
 }
 
 function displayText(x, y, words, sizeOfText, theColor) { //displays text
+  push();
   fill(theColor);
   strokeWeight(0);
   textAlign(CENTER, CENTER);
   textSize(sizeOfText);
   text(words, x, y);
+  pop();
 }
 
 function showShop() { //displays shop when button is pressed
@@ -140,11 +142,11 @@ function showShop() { //displays shop when button is pressed
     stroke(220);
     rect(shopLocation, shopLocation, shopWidth, shopHeight);
     strokeWeight(2);
-    for (let i=0; i<shopHeight; i+=shopHeight/8) {
+    for (let i=0; i<shopHeight; i+=shopHeight/7) {
       fill("white");
-      rect(shopLocation, shopLocation+i, shopWidth, shopHeight/8);
-      buyButtonArray[floor(i/(shopHeight/8))].display();
-      displayText(shopWidth/4, i+shopHeight/16, shopTextArray[i/(shopHeight/8)], 15, "black");
+      rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
+      buyButtonArray[floor(i/(shopHeight/7))].display();
+      displayText(shopWidth/2, i+shopHeight/14, shopTextArray[i/(shopHeight/7)], 15, "black");
     }
   }
 }

@@ -10,7 +10,8 @@
 let cookieButton, shopButton, upgradeButton;
 let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage;
 let cookieCounter = 0;
-let minHW, shopHeight, shopWidth;
+let cookiesPerSecond = 0;
+let minHeightWidth, shopHeight, shopWidth;
 let isShop = false;
 let isUpgrade = false;
 let shopLocation = 10;
@@ -23,18 +24,20 @@ function preload() { //loads images
   shopImage = loadImage("assets/Shop.png");
   clickedShopImage = loadImage("assets/Shop.png");
   buyImage = loadImage("assets/Buy Button.png");
+  clickedBuyImage = loadImage("assets/Buy Button.png");
 }
 
 function setup() { //resizes images, sets buttons, and sets shop size
   createCanvas(windowWidth, windowHeight);
-  minHW = min(height, width);
+  minHeightWidth = min(height, width);
   shopWidth = width/5;
   shopHeight = height/1.4;
 
-  cookieImage.resizeNN(minHW/3, minHW/3);
-  clickedCookieImage.resizeNN(minHW/3-10, minHW/3-10);
-  shopImage.resizeNN(minHW/8, minHW/8);
-  clickedShopImage.resizeNN(minHW/8-10, minHW/8-10);
+  cookieImage.resizeNN(minHeightWidth/3, minHeightWidth/3);
+  clickedCookieImage.resizeNN(minHeightWidth/3-10, minHeightWidth/3-10);
+  shopImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
+  clickedShopImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
+  clickedBuyImage.resizeNN(buyImage.width-5, buyImage.height-5);
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
@@ -49,7 +52,7 @@ function draw() { //displays buttons and text
   shopButton.display();
   // upgrade.display();
 
-  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14, "white");
+  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14, "white", CENTER, CENTER);
   showShop();
 }
 
@@ -117,20 +120,25 @@ function mousePressed() { //this determines what happens when you interact with 
     isShop = !isShop;
     isUpgrade = false;
   }
+  for (let i=0; i<7; i++) {
+    if (buyButtonArray[i].mouseDetected()) {
+      buyButtonArray[i].buttonPressed();
+    }
+  }
 }
 
 function buyButtonSetup() {
   for (let i=0; i<shopHeight; i+=shopHeight/7) {
-    let buyButton = new SquareButton(shopWidth-10, i+shopHeight/7, buyImage, buyImage, buyImage.width, buyImage.height);
+    let buyButton = new SquareButton(shopWidth-10, i+shopHeight/7, buyImage, clickedBuyImage, buyImage.width, buyImage.height);
     buyButtonArray.push(buyButton);
   }
 }
 
-function displayText(x, y, words, sizeOfText, theColor) { //displays text
+function displayText(x, y, words, sizeOfText, theColor, horiAlign, vertiAlign) { //displays text
   push();
   fill(theColor);
   strokeWeight(0);
-  textAlign(CENTER, CENTER);
+  textAlign(horiAlign, vertiAlign);
   textSize(sizeOfText);
   text(words, x, y);
   pop();
@@ -146,7 +154,7 @@ function showShop() { //displays shop when button is pressed
       fill("white");
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
-      displayText(shopWidth/2, i+shopHeight/14, shopTextArray[i/(shopHeight/7)], 15, "black");
+      displayText(shopLocation+10, i+shopHeight/14, shopTextArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
     }
   }
 }

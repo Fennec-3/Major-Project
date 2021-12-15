@@ -16,7 +16,8 @@ let isShop = false;
 let isUpgrade = false;
 let shopLocation = 10;
 let buyButtonArray = [];
-let shopTextArray = ["CookieBot 9000", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
+let shopItemArray = ["CookieBot 9000", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
+let shopPriceArray = []
 
 function preload() { //loads images
   cookieImage = loadImage("assets/Cookie.png");
@@ -37,7 +38,7 @@ function setup() { //resizes images, sets buttons, and sets shop size
   clickedCookieImage.resizeNN(minHeightWidth/3-10, minHeightWidth/3-10);
   shopImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
   clickedShopImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
-  clickedBuyImage.resizeNN(buyImage.width-5, buyImage.height-5);
+  clickedBuyImage.resizeNN(buyImage.width-2, buyImage.height-2);
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
@@ -122,7 +123,11 @@ function mousePressed() { //this determines what happens when you interact with 
   }
   for (let i=0; i<7; i++) {
     if (buyButtonArray[i].mouseDetected()) {
-      buyButtonArray[i].buttonPressed();
+      if (shopItemArray[i] === "CookieBot 9000" && cookieCounter >= 10) {
+        buyButtonArray[i].buttonPressed();
+        cookieCounter -= 10;
+        cookiesPerSecond += 1;
+      }
     }
   }
 }
@@ -154,7 +159,7 @@ function showShop() { //displays shop when button is pressed
       fill("white");
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
-      displayText(shopLocation+10, i+shopHeight/14, shopTextArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
+      displayText(shopLocation+10, i+shopHeight/14, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
     }
   }
 }

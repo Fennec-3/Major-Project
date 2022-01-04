@@ -8,7 +8,7 @@
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
 let cookieButton, shopButton, upgradeButton;
-let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage;
+let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage;
 let cookieCounter = 0;
 let cookiesPerSecond = 0;
 let minHeightWidth, shopHeight, shopWidth;
@@ -17,7 +17,8 @@ let isUpgrade = false;
 let shopLocation = 10;
 let buyButtonArray = [];
 let shopItemArray = ["CookieBot 9000", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
-let shopPriceArray = []
+let shopPriceArray = [100, 1000, 10000, 100000, 1000000, 10000000, 100000000];
+let cpsArray = [1, 5, 25, 125, 625, 3125, 15625]
 
 function preload() { //loads images
   cookieImage = loadImage("assets/Cookie.png");
@@ -123,9 +124,9 @@ function mousePressed() { //this determines what happens when you interact with 
   }
   for (let i=0; i<7; i++) {
     if (buyButtonArray[i].mouseDetected()) {
-      if (shopItemArray[i] === "CookieBot 9000" && cookieCounter >= 10) {
+      if (cookieCounter >= shopPriceArray[i]) {
         buyButtonArray[i].buttonPressed();
-        cookieCounter -= 10;
+        cookieCounter -= shopPriceArray[i];
         cookiesPerSecond += 1;
       }
     }

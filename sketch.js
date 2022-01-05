@@ -16,7 +16,7 @@ let isShop = false;
 let isUpgrade = false;
 let shopLocation = 10;
 let buyButtonArray = [];
-let shopItemArray = ["Grandma", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
+let shopItemArray = ["Cookie Oven", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
 let shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
 let cpsArray = [0.1, 1, 8, 47, 260, 1400, 7800]; //cps = cookies per second
 let cpsTime = 1000;

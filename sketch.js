@@ -16,9 +16,10 @@ let isShop = false;
 let isUpgrade = false;
 let shopLocation = 10;
 let buyButtonArray = [];
-let shopItemArray = ["CookieBot 9000", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
-let shopPriceArray = [100, 1000, 10000, 100000, 1000000, 10000000, 100000000];
-let cpsArray = [1, 5, 25, 125, 625, 3125, 15625]
+let shopItemArray = ["Grandma", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
+let shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
+let cpsArray = [0.1, 1, 8, 47, 260, 1400, 7800]; //cps = cookies per second
+let cpsTime = 1000;
 
 function preload() { //loads images
   cookieImage = loadImage("assets/Cookie.png");
@@ -54,8 +55,13 @@ function draw() { //displays buttons and text
   shopButton.display();
   // upgrade.display();
 
-  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + cookieCounter, min(height, width)/14, "white", CENTER, CENTER);
+  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + cookieCounter, minHeightWidth/14, "white", CENTER, CENTER);
+  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond, minHeightWidth/28, "white", CENTER, CENTER);
   showShop();
+  if (millis() >= cpsTime) {
+    cookieCounter +=  cookiesPerSecond;
+    cpsTime += 1000;
+  }
 }
 
 class CircleButton { //class for all the buttons
@@ -160,7 +166,7 @@ function showShop() { //displays shop when button is pressed
       fill("white");
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
-      displayText(shopLocation+10, i+shopHeight/14, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+10, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
     }
   }
 }

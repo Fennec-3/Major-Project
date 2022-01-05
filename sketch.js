@@ -20,6 +20,7 @@ let shopItemArray = ["Grandma", "Cookie Farm", "Cookie Mine", "Cookie Plantation
 let shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
 let cpsArray = [0.1, 1, 8, 47, 260, 1400, 7800]; //cps = cookies per second
 let cpsTime = 1000;
+let priceMultiplier = 1.15;
 
 function preload() { //loads images
   cookieImage = loadImage("assets/Cookie.png");
@@ -40,7 +41,7 @@ function setup() { //resizes images, sets buttons, and sets shop size
   clickedCookieImage.resizeNN(minHeightWidth/3-10, minHeightWidth/3-10);
   shopImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
   clickedShopImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
-  clickedBuyImage.resizeNN(buyImage.width-2, buyImage.height-2);
+  buyImage.resizeNN(buyImage.width*1.7, buyImage.height*1.7);
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
@@ -55,8 +56,8 @@ function draw() { //displays buttons and text
   shopButton.display();
   // upgrade.display();
 
-  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + cookieCounter, minHeightWidth/14, "white", CENTER, CENTER);
-  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond, minHeightWidth/28, "white", CENTER, CENTER);
+  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + floor(cookieCounter) , minHeightWidth/14, "white", CENTER, CENTER);
+  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond.toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
   showShop();
   if (millis() >= cpsTime) {
     cookieCounter +=  cookiesPerSecond;
@@ -64,57 +65,10 @@ function draw() { //displays buttons and text
   }
 }
 
-class CircleButton { //class for all the buttons
-  constructor(x, y, theImage, clickedImage) {
-    this.x = x;
-    this.y = y;
-    this.image = theImage;
-    this.theClickedImage = clickedImage;
-    this.radius = max(theImage.width/2, theImage.height/2);
-    this.clickTime;
-  }
-
-  display() {
-    imageMode(CENTER);
-    if (millis() < this.clickTime + 100) {
-      image(this.theClickedImage, this.x, this.y);
-    }
-    else {
-      image(this.image, this.x, this.y);
-    }
-  }
-
-  mouseDetected() {
-    if (mouseX > this.x - this.radius && mouseX < this.x + this.radius && mouseY > this.y - this.radius && mouseY < this.y + this.radius) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  buttonPressed() {
-    this.clickTime = millis();
-  }
-}
-
-class SquareButton extends CircleButton {
-  constructor(x, y, theImage, clickedImage, buttonWidth, buttonHeight) {
-    super(x, y, theImage, clickedImage);
-    this.x = x;
-    this.y = y;
-    this.image = theImage;
-    this.theClickedImage = clickedImage;
-    this.buttonWidth = buttonWidth/2;
-    this.buttonHeight = buttonHeight/2;
-    this.clickTime;
-  }
-
-  mouseDetected() {
-    if (mouseX < this.x + this.buttonWidth && mouseX > this.x - this.buttonWidth && mouseY > this.y - this.buttonHeight && mouseY < this.y + this.buttonHeight) {
-      return true;
-    } else {
-      return false;
-    }
+function buyButtonSetup() {
+  for (let i=0; i<shopHeight; i+=shopHeight/7) {
+    let buyButton = new SquareButton(shopWidth-20, i+shopHeight/7.4, buyImage, clickedBuyImage, buyImage.width, buyImage.height);
+    buyButtonArray.push(buyButton);
   }
 }
 
@@ -133,16 +87,10 @@ function mousePressed() { //this determines what happens when you interact with 
       if (cookieCounter >= shopPriceArray[i]) {
         buyButtonArray[i].buttonPressed();
         cookieCounter -= shopPriceArray[i];
-        cookiesPerSecond += 1;
+        cookiesPerSecond += cpsArray[i];
+        shopPriceArray[i] *= priceMultiplier;
       }
     }
-  }
-}
-
-function buyButtonSetup() {
-  for (let i=0; i<shopHeight; i+=shopHeight/7) {
-    let buyButton = new SquareButton(shopWidth-10, i+shopHeight/7, buyImage, clickedBuyImage, buyImage.width, buyImage.height);
-    buyButtonArray.push(buyButton);
   }
 }
 
@@ -167,6 +115,8 @@ function showShop() { //displays shop when button is pressed
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
       displayText(shopLocation+10, shopLocation+i+10, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+25, "Price: " + shopPriceArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+40, "Cps: " + cpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
     }
   }
 }

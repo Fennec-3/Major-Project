@@ -6,9 +6,9 @@ I would like to make a cookie clicker replica game
 
 ## Must Have List
 
--functioning cookie and shop
--upgrades that can be bought from shop
--displays the number of cookies someone has as well as their cookies per second (cps)
+-functioning cookie and shop (done)
+-upgrades that can be bought from shop (done)
+-displays the number of cookies someone has as well as their cookies per second (cps) (done)
 -cps boosting upgrades that can be bought from shop
 -sound effects and music
 
@@ -16,4 +16,6 @@ I would like to make a cookie clicker replica game
 
 -Schellenberg mode (cheat mode)
 -milk/chocolate milk/golden cookies
--scaling prices
+-scaling prices (done)
+-local storage
+-stats (total cookie produced and total cookies spent)

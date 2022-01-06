@@ -8,7 +8,7 @@
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
 let cookieButton, shopButton, upgradeButton;
-let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage;
+let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage;
 let cookieCounter = 0;
 let cookiesPerClick = 1;
 let cookiesPerSecond = 0; //aka Cps
@@ -20,9 +20,9 @@ let buyButtonArray = [];
 let shopItemArray = ["Cookie Oven", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
 let shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
 let cpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
-let upgradeItemArray = ["Stronger Fingers", "Harder Clicks", "Big Hands", "Cookie Boxing", "Cookie Oven 9000", "More Farmers", "Cookie Manager"];
-let upgradeDescriptionArray = ["2x Cookies Per Click", "2x Cookies Per Click", "2x Cookies Per Click", "2x Cookies Per Click", "Ovens are twice as efficient", "Farms are twice as efficient", "Cps increased by 25%"];
-let upgradePriceArray = [100, 1000, 2500, 5000, 500, 2000, 1000000];
+let upgradeItemArray = ["Stronger Fingers", "Harder Clicks", "Big Hands", "Cookie Boxing", "More Farmers", "Cookie Drills", "Cookie Manager"];
+let upgradeDescriptionArray = ["2x Cookies Per Click", "2x Cookies Per Click", "2x Cookies Per Click", "2x Cookies Per Click", "New farms are twice as efficient", "New mines are twice as efficient", "Cps increased by 25%"];
+let upgradePriceArray = [100, 500, 10000, 100000, 1000, 11000, 1000000];
 let upgradeEffectArray = [];
 let cpsTime = 1000;
 let priceMultiplier = 1.15;
@@ -34,6 +34,8 @@ function preload() { //loads images
   clickedShopImage = loadImage("assets/Shop.png");
   buyImage = loadImage("assets/Buy Button.png");
   clickedBuyImage = loadImage("assets/Buy Button.png");
+  upgradeImage = loadImage("assets/Upgrade Button.png");
+  clickedUpgradeImage = loadImage("assets/Upgrade Button.png");
 }
 
 function setup() { //resizes images, sets buttons, and sets shop size
@@ -47,11 +49,13 @@ function setup() { //resizes images, sets buttons, and sets shop size
   shopImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
   clickedShopImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
   buyImage.resizeNN(buyImage.width*1.7, buyImage.height*1.7);
+  upgradeImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
+  clickedUpgradeImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
+
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
-  // upgrade = new SquareButton(width-50, 160);
-
+  upgradeButton = new SquareButton(width-50, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
   buyButtonSetup();
 }
 
@@ -59,7 +63,7 @@ function draw() { //displays buttons and text
   background(15, 155, 219);
   cookieButton.display();
   shopButton.display();
-  // upgrade.display();
+  upgradeButton.display();
 
   displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + floor(cookieCounter) , minHeightWidth/14, "white", CENTER, CENTER);
   displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond.toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
@@ -89,6 +93,12 @@ function mousePressed() { //this determines what happens when you interact with 
     isUpgrade = false;
   }
 
+  if (upgradeButton.mouseDetected()) {
+    upgradeButton.buttonPressed();
+    isUpgrade = !isUpgrade;
+    isShop = false;
+  }
+
   for (let i=0; i<7; i++) {
     if (buyButtonArray[i].mouseDetected()) {
       if (cookieCounter >= shopPriceArray[i] && isShop) {
@@ -96,6 +106,14 @@ function mousePressed() { //this determines what happens when you interact with 
         cookieCounter -= shopPriceArray[i];
         cookiesPerSecond += cpsArray[i];
         shopPriceArray[i] *= priceMultiplier;
+      }
+
+      if (cookieCounter >= upgradePriceArray[i] && isUpgrade) {
+        switch (true) {
+          case i<=3:
+            cookiesPerClick *= 2;
+            break;
+        }
       }
     }
   }
@@ -135,9 +153,9 @@ function showShop() { //displays building shop or upgrade shop when their button
       fill("white");
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
-      displayText(shopLocation+10, shopLocation+i+15, upgradeItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+10, upgradeItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+30, "Price: " + upgradePriceArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
-      displayText(shopLocation+10, shopLocation+i+45, upgradeDescriptionArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+45, upgradeDescriptionArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
     }
   }
 }

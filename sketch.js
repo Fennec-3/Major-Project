@@ -10,7 +10,8 @@
 let cookieButton, shopButton, upgradeButton;
 let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage;
 let cookieCounter = 0;
-let cookiesPerSecond = 0;
+let cookiesPerClick = 1;
+let cookiesPerSecond = 0; //aka Cps
 let minHeightWidth, shopHeight, shopWidth;
 let isShop = false;
 let isUpgrade = false;
@@ -18,7 +19,11 @@ let shopLocation = 10;
 let buyButtonArray = [];
 let shopItemArray = ["Cookie Oven", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
 let shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
-let cpsArray = [0.1, 1, 8, 47, 260, 1400, 7800]; //cps = cookies per second
+let cpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
+let upgradeItemArray = ["Stronger Fingers", "Harder Clicks", "Big Hands", "Cookie Boxing", "Cookie Oven 9000", "More Farmers", "Cookie Manager"];
+let upgradeDescriptionArray = ["2x Cookies Per Click", "2x Cookies Per Click", "2x Cookies Per Click", "2x Cookies Per Click", "Ovens are twice as efficient", "Farms are twice as efficient", "Cps increased by 25%"];
+let upgradePriceArray = [100, 1000, 2500, 5000, 500, 2000, 1000000];
+let upgradeEffectArray = [];
 let cpsTime = 1000;
 let priceMultiplier = 1.15;
 
@@ -45,7 +50,7 @@ function setup() { //resizes images, sets buttons, and sets shop size
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
-  // upgrade = new Button(width-50, 160);
+  // upgrade = new SquareButton(width-50, 160);
 
   buyButtonSetup();
 }
@@ -74,17 +79,19 @@ function buyButtonSetup() {
 
 function mousePressed() { //this determines what happens when you interact with the buttons
   if (cookieButton.mouseDetected()) {
-    cookieCounter++;
+    cookieCounter += cookiesPerClick;
     cookieButton.buttonPressed();
   }
+
   if (shopButton.mouseDetected()) {
     shopButton.buttonPressed();
     isShop = !isShop;
     isUpgrade = false;
   }
+
   for (let i=0; i<7; i++) {
     if (buyButtonArray[i].mouseDetected()) {
-      if (cookieCounter >= shopPriceArray[i]) {
+      if (cookieCounter >= shopPriceArray[i] && isShop) {
         buyButtonArray[i].buttonPressed();
         cookieCounter -= shopPriceArray[i];
         cookiesPerSecond += cpsArray[i];
@@ -104,12 +111,15 @@ function displayText(x, y, words, sizeOfText, theColor, horiAlign, vertiAlign) {
   pop();
 }
 
-function showShop() { //displays shop when button is pressed
-  if (isShop === true) {
+function showShop() { //displays building shop or upgrade shop when their button is pressed
+  if (isShop || isUpgrade) {
     strokeWeight(10);
     stroke(220);
     rect(shopLocation, shopLocation, shopWidth, shopHeight);
     strokeWeight(2);
+  }
+
+  if (isShop) {
     for (let i=0; i<shopHeight; i+=shopHeight/7) {
       fill("white");
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
@@ -117,6 +127,17 @@ function showShop() { //displays shop when button is pressed
       displayText(shopLocation+10, shopLocation+i+10, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+25, "Price: " + shopPriceArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+40, "Cps: " + cpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
+    }
+  }
+
+  if (isUpgrade) {
+    for (let i=0; i<shopHeight; i+=shopHeight/7) {
+      fill("white");
+      rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
+      buyButtonArray[floor(i/(shopHeight/7))].display();
+      displayText(shopLocation+10, shopLocation+i+15, upgradeItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+30, "Price: " + upgradePriceArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+45, upgradeDescriptionArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
     }
   }
 }

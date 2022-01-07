@@ -23,7 +23,7 @@ let cpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
 let upgradeItemArray = ["Stronger Fingers", "Harder Clicks", "Big Hands", "Cookie Boxing", "More Farmers", "Cookie Drills", "Cookie Manager"];
 let upgradeDescriptionArray = ["2x Cookies Per Click", "2x Cookies Per Click", "2x Cookies Per Click", "2x Cookies Per Click", "New farms are twice as efficient", "New mines are twice as efficient", "Cps increased by 25%"];
 let upgradePriceArray = [100, 500, 10000, 100000, 1000, 11000, 1000000];
-let upgradeEffectArray = [];
+let managerWasPurchased = false;
 let cpsTime = 1000;
 let priceMultiplier = 1.15;
 
@@ -66,12 +66,22 @@ function draw() { //displays buttons and text
   upgradeButton.display();
 
   displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + floor(cookieCounter) , minHeightWidth/14, "white", CENTER, CENTER);
-  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond.toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
-  showShop();
-  if (millis() >= cpsTime) {
-    cookieCounter +=  cookiesPerSecond;
-    cpsTime += 1000;
+  if (managerWasPurchased) {
+    displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + (cookiesPerSecond + (cookiesPerSecond/4)).toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
+  } else {
+    displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond.toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
   }
+
+  if (millis() >= cpsTime) {
+    cpsTime += 1000;
+    if (managerWasPurchased) {
+      cookieCounter +=  cookiesPerSecond + (cookiesPerSecond/4);
+    } else {
+      cookieCounter +=  cookiesPerSecond
+    }
+  }
+
+  showShop();
 }
 
 function buyButtonSetup() {
@@ -109,9 +119,23 @@ function mousePressed() { //this determines what happens when you interact with 
       }
 
       if (cookieCounter >= upgradePriceArray[i] && isUpgrade) {
+        cookieCounter -= upgradePriceArray[i];
         switch (true) {
-          case i<=3:
+          case i<4:
             cookiesPerClick *= 2;
+            buyButtonArray[i].buttonPressed();
+            break;
+          case i<5:
+            cpsArray[1] *= 2;
+            buyButtonArray[i].buttonPressed();
+            break;
+          case i<6:
+            cpsArray[2] *= 2;
+            buyButtonArray[i].buttonPressed();
+            break;
+          case i<7:
+            managerWasPurchased = true;
+            buyButtonArray[i].buttonPressed();
             break;
         }
       }
@@ -143,7 +167,7 @@ function showShop() { //displays building shop or upgrade shop when their button
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
       displayText(shopLocation+10, shopLocation+i+10, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
-      displayText(shopLocation+10, shopLocation+i+25, "Price: " + shopPriceArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+25, "Price: " + floor(shopPriceArray[i/(shopHeight/7)]), 13, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+40, "Cps: " + cpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
     }
   }

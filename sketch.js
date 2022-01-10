@@ -9,6 +9,7 @@
 
 let cookieButton, shopButton, upgradeButton;
 let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage;
+let backgroundMusic, buySound;
 let cookieCounter = 0;
 let cookiesPerClick = 1;
 let cookiesPerSecond = 0; //aka Cps
@@ -36,6 +37,9 @@ function preload() { //loads images
   clickedBuyImage = loadImage("assets/Buy Button.png");
   upgradeImage = loadImage("assets/Upgrade Button.png");
   clickedUpgradeImage = loadImage("assets/Upgrade Button.png");
+
+  backgroundMusic = loadSound("assets/Lay Low.mp3");
+  buySound = loadSound("assets/Coins_Few_10.mp3");
 }
 
 function setup() { //resizes images, sets buttons, and sets shop size

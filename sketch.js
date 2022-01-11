@@ -39,7 +39,7 @@ function preload() { //loads images
   clickedUpgradeImage = loadImage("assets/Upgrade Button.png");
 
   backgroundMusic = loadSound("assets/Lay Low.mp3");
-  buySound = loadSound("assets/Coins_Few_10.mp3");
+  buySound = loadSound("assets/Coins_sound.mp3");
 }
 
 function setup() { //resizes images, sets buttons, and sets shop size
@@ -48,6 +48,8 @@ function setup() { //resizes images, sets buttons, and sets shop size
   shopWidth = width/5;
   shopHeight = height/1.4;
 
+  backgroundMusic.loop();
+
   cookieImage.resizeNN(minHeightWidth/3, minHeightWidth/3);
   clickedCookieImage.resizeNN(minHeightWidth/3-10, minHeightWidth/3-10);
   shopImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
@@ -55,7 +57,6 @@ function setup() { //resizes images, sets buttons, and sets shop size
   buyImage.resizeNN(buyImage.width*1.7, buyImage.height*1.7);
   upgradeImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
   clickedUpgradeImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
-
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);

@@ -7,9 +7,9 @@
 //
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
-let cookieButton, shopButton, upgradeButton;
+let cookieButton, shopButton, upgradeButton, tempButton;
 let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage;
-let backgroundMusic, buySound;
+let backgroundMusic, buySound, popSound, clickSound;
 let cookieCounter = 0;
 let cookiesPerClick = 1;
 let cookiesPerSecond = 0; //aka Cps
@@ -40,6 +40,8 @@ function preload() { //loads images
 
   backgroundMusic = loadSound("assets/Lay Low.mp3");
   buySound = loadSound("assets/Coins_sound.mp3");
+  popSound = loadSound("assets/Pop_sound.ogg");
+  clickSound = loadSound("assets/Click_sound.mp3");
 }
 
 function setup() { //resizes images, sets buttons, and sets shop size
@@ -47,8 +49,6 @@ function setup() { //resizes images, sets buttons, and sets shop size
   minHeightWidth = min(height, width);
   shopWidth = width/5;
   shopHeight = height/1.4;
-
-  backgroundMusic.loop();
 
   cookieImage.resizeNN(minHeightWidth/3, minHeightWidth/3);
   clickedCookieImage.resizeNN(minHeightWidth/3-10, minHeightWidth/3-10);
@@ -61,6 +61,7 @@ function setup() { //resizes images, sets buttons, and sets shop size
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   upgradeButton = new SquareButton(width-50, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
+  tempButton = new CircleButton(cookieButton.x, cookieButton.y+150, shopImage, clickedShopImage);
   buyButtonSetup();
 }
 
@@ -114,9 +115,15 @@ function mousePressed() { //this determines what happens when you interact with 
     isShop = false;
   }
 
+  if (tempButton.mouseDetected()) {
+    tempButton.buttonPressed();
+    backgroundMusic.loop();
+  }
+
   for (let i=0; i<7; i++) {
     if (buyButtonArray[i].mouseDetected()) {
       if (cookieCounter >= shopPriceArray[i] && isShop) {
+        buySound.play();
         buyButtonArray[i].buttonPressed();
         cookieCounter -= shopPriceArray[i];
         cookiesPerSecond += cpsArray[i];
@@ -124,6 +131,7 @@ function mousePressed() { //this determines what happens when you interact with 
       }
 
       if (cookieCounter >= upgradePriceArray[i] && isUpgrade) {
+        buySound.play();
         cookieCounter -= upgradePriceArray[i];
         switch (true) {
           case i<4:

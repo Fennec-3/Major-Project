@@ -18,15 +18,16 @@ let isShop = false;
 let isUpgrade = false;
 let shopLocation = 10;
 let buyButtonArray = [];
-let shopItemArray = ["Cookie Oven", "Cookie Farm", "Cookie Mine", "Cookie Plantation", "Cookie Factory", "Cookie Laundering", "Cookie Corporation"];
+let shopItemArray = ["Cookie Oven", "Cookie Farm", "Cookie Mine", "Cookie Factory", "Cookie Embezzlement", "Cookie Laundering", "Cookie Corporation"];
 let shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
 let cpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
-let upgradeItemArray = ["Stronger Fingers", "Harder Clicks", "Big Hands", "Cookie Boxing", "More Farmers", "Cookie Drills", "Cookie Manager"];
-let upgradeDescriptionArray = ["2x Cookies Per Click", "2x Cookies Per Click", "2x Cookies Per Click", "2x Cookies Per Click", "New farms are twice as efficient", "New mines are twice as efficient", "Cps increased by 25%"];
-let upgradePriceArray = [100, 500, 10000, 100000, 1000, 11000, 1000000];
+let upgradeItemArray = ["Stronger Fingers", "More Farmers", "Cookie Drills", "OSHA Approved Factory", "Slight of Hand", "Smooth Criminal", "Political Influence"];
+let upgradeDescriptionArray = ["2x Cookies Per Click", "New farms are twice as efficient", "New mines are twice as efficient", "New factories are twice as efficient", "Embezzle twice as many cookies", "New Laundering facilities are twice as efficient", "New corporations are twice as efficient"];
+let upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000];
 let managerWasPurchased = false;
 let cpsTime = 1000;
 let priceMultiplier = 1.15;
+let upgradePriceMultiplier = 10;
 
 function preload() { //loads images
   cookieImage = loadImage("assets/Cookie.png");
@@ -61,7 +62,7 @@ function setup() { //resizes images, sets buttons, and sets shop size
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   upgradeButton = new SquareButton(width-50, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
-  tempButton = new CircleButton(cookieButton.x, cookieButton.y+150, shopImage, clickedShopImage);
+  tempButton = new CircleButton(cookieButton.x, cookieButton.y+200, shopImage, clickedShopImage);
   buyButtonSetup();
 }
 
@@ -101,21 +102,24 @@ function mousePressed() { //this determines what happens when you interact with 
   if (cookieButton.mouseDetected()) {
     cookieCounter += cookiesPerClick;
     cookieButton.buttonPressed();
+    clickSound.play();
   }
 
   if (shopButton.mouseDetected()) {
     shopButton.buttonPressed();
     isShop = !isShop;
     isUpgrade = false;
+    popSound.play();
   }
 
   if (upgradeButton.mouseDetected()) {
     upgradeButton.buttonPressed();
     isUpgrade = !isUpgrade;
     isShop = false;
+    popSound.play();
   }
 
-  if (tempButton.mouseDetected()) {
+  if (tempButton.mouseDetected()) { //temporary, delete after title added
     tempButton.buttonPressed();
     backgroundMusic.loop();
   }
@@ -132,23 +136,15 @@ function mousePressed() { //this determines what happens when you interact with 
 
       if (cookieCounter >= upgradePriceArray[i] && isUpgrade) {
         buySound.play();
+        buyButtonArray[i].buttonPressed();
         cookieCounter -= upgradePriceArray[i];
+        upgradePriceArray[i] *= upgradePriceMultiplier;
         switch (true) {
-          case i<4:
+          case i<1:
             cookiesPerClick *= 2;
-            buyButtonArray[i].buttonPressed();
-            break;
-          case i<5:
-            cpsArray[1] *= 2;
-            buyButtonArray[i].buttonPressed();
-            break;
-          case i<6:
-            cpsArray[2] *= 2;
-            buyButtonArray[i].buttonPressed();
             break;
           case i<7:
-            managerWasPurchased = true;
-            buyButtonArray[i].buttonPressed();
+            cpsArray[i] *= 2;
             break;
         }
       }

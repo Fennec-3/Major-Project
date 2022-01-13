@@ -4,7 +4,7 @@
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
-//
+// temp list of things: cookieCounter, CPS, shopPriceArray, upgradePriceArray, shopCpsArray
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
 let cookieButton, shopButton, upgradeButton, tempButton;
@@ -20,7 +20,7 @@ let shopLocation = 10;
 let buyButtonArray = [];
 let shopItemArray = ["Cookie Oven", "Cookie Farm", "Cookie Mine", "Cookie Factory", "Cookie Embezzlement", "Cookie Laundering", "Cookie Corporation"];
 let shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
-let cpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
+let shopCpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
 let upgradeItemArray = ["Stronger Fingers", "More Farmers", "Cookie Drills", "OSHA Approved Factory", "Slight of Hand", "Smooth Criminal", "Political Influence"];
 let upgradeDescriptionArray = ["2x Cookies Per Click", "New farms are twice as efficient", "New mines are twice as efficient", "New factories are twice as efficient", "Embezzle twice as many cookies", "New Laundering facilities are twice as efficient", "New corporations are twice as efficient"];
 let upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000];
@@ -50,6 +50,15 @@ function setup() { //resizes images, sets buttons, and sets shop size
   minHeightWidth = min(height, width);
   shopWidth = width/5;
   shopHeight = height/1.4;
+
+  if (getItem("cookies") !== null) {
+    cookieCounter = getItem("cookies");
+    cookiesPerSecond = getItem("cps");
+    cookiesPerClick = getItem("cpc");
+    shopPriceArray = getItem("shopPrices");
+    upgradePriceArray = getItem("upgradePrices");
+    shopCpsArray = getItem("cpsArray");
+  }
 
   cookieImage.resizeNN(minHeightWidth/3, minHeightWidth/3);
   clickedCookieImage.resizeNN(minHeightWidth/3-10, minHeightWidth/3-10);
@@ -87,8 +96,14 @@ function draw() { //displays buttons and text
       cookieCounter +=  cookiesPerSecond
     }
   }
-
   showShop();
+
+  storeItem("cookies", cookieCounter);
+  storeItem("cps", cookiesPerSecond);
+  storeItem("cpc", cookiesPerClick);
+  storeItem("shopPrices", shopPriceArray);
+  storeItem("upgradePrices", upgradePriceArray);
+  storeItem("cpsArray", shopCpsArray);
 }
 
 function buyButtonSetup() {
@@ -130,7 +145,7 @@ function mousePressed() { //this determines what happens when you interact with 
         buySound.play();
         buyButtonArray[i].buttonPressed();
         cookieCounter -= shopPriceArray[i];
-        cookiesPerSecond += cpsArray[i];
+        cookiesPerSecond += shopCpsArray[i];
         shopPriceArray[i] *= priceMultiplier;
       }
 
@@ -144,7 +159,7 @@ function mousePressed() { //this determines what happens when you interact with 
             cookiesPerClick *= 2;
             break;
           case i<7:
-            cpsArray[i] *= 2;
+            shopCpsArray[i] *= 2;
             break;
         }
       }
@@ -177,7 +192,7 @@ function showShop() { //displays building shop or upgrade shop when their button
       buyButtonArray[floor(i/(shopHeight/7))].display();
       displayText(shopLocation+10, shopLocation+i+10, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+25, "Price: " + floor(shopPriceArray[i/(shopHeight/7)]), 13, "black", LEFT, TOP);
-      displayText(shopLocation+10, shopLocation+i+40, "Cps: " + cpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+40, "Cps: " + shopCpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
     }
   }
 

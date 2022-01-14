@@ -14,6 +14,7 @@ let cookieCounter = 0;
 let cookiesPerClick = 1;
 let cookiesPerSecond = 0; //aka Cps
 let minHeightWidth, shopHeight, shopWidth;
+let isTitleScreen = true;
 let isShop = false;
 let isUpgrade = false;
 let shopLocation = 10;
@@ -38,6 +39,8 @@ function preload() { //loads images
   clickedBuyImage = loadImage("assets/Buy Button.png");
   upgradeImage = loadImage("assets/Upgrade Button.png");
   clickedUpgradeImage = loadImage("assets/Upgrade Button.png");
+  playImage = loadImage("assets/Play Button.png");
+  clickedPlayImage = loadImage("assets/Clicked Play Button.png");
 
   backgroundMusic = loadSound("assets/Lay Low.mp3");
   buySound = loadSound("assets/Coins_sound.mp3");
@@ -67,11 +70,12 @@ function setup() { //resizes images, sets buttons, and sets shop size
   buyImage.resizeNN(buyImage.width*1.7, buyImage.height*1.7);
   upgradeImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
   clickedUpgradeImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
+  // playImage.resizeNN()
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   upgradeButton = new SquareButton(width-50, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
-  tempButton = new CircleButton(cookieButton.x, cookieButton.y+200, shopImage, clickedShopImage);
+  // playButton = new SquareButton(cookieButton.x, cookieButton.y+200, , );
   buyButtonSetup();
 }
 
@@ -81,11 +85,11 @@ function draw() { //displays buttons and text
   shopButton.display();
   upgradeButton.display();
 
-  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + floor(cookieCounter) , minHeightWidth/14, "white", CENTER, CENTER);
+  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + floor(cookieCounter).toLocaleString() , minHeightWidth/14, "white", CENTER, CENTER);
   if (managerWasPurchased) {
-    displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + (cookiesPerSecond + (cookiesPerSecond/4)).toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
+    displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + ((cookiesPerSecond + (cookiesPerSecond/4)).toFixed(1)).toLocaleString(), minHeightWidth/28, "white", CENTER, CENTER);
   } else {
-    displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond.toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
+    displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + (cookiesPerSecond.toFixed(1)).toLocaleString(), minHeightWidth/28, "white", CENTER, CENTER);
   }
 
   if (millis() >= cpsTime) {
@@ -191,7 +195,7 @@ function showShop() { //displays building shop or upgrade shop when their button
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
       displayText(shopLocation+10, shopLocation+i+10, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
-      displayText(shopLocation+10, shopLocation+i+25, "Price: " + floor(shopPriceArray[i/(shopHeight/7)]), 13, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+25, "Price: " + floor(shopPriceArray[i/(shopHeight/7)]).toLocaleString(), 13, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+40, "Cps: " + shopCpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
     }
   }
@@ -202,7 +206,7 @@ function showShop() { //displays building shop or upgrade shop when their button
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
       displayText(shopLocation+10, shopLocation+i+10, upgradeItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
-      displayText(shopLocation+10, shopLocation+i+30, "Price: " + upgradePriceArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+i+30, "Price: " + upgradePriceArray[i/(shopHeight/7)].toLocaleString(), 13, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+45, upgradeDescriptionArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
     }
   }

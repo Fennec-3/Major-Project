@@ -7,8 +7,8 @@
 // temp list of things: cookieCounter, CPS, shopPriceArray, upgradePriceArray, shopCpsArray
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
-let cookieButton, shopButton, upgradeButton, tempButton;
-let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage;
+let cookieButton, shopButton, upgradeButton, playButton;
+let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage, playImage, clickedPlayImage;
 let backgroundMusic, buySound, popSound, clickSound;
 let cookieCounter = 0;
 let cookiesPerClick = 1;
@@ -70,26 +70,34 @@ function setup() { //resizes images, sets buttons, and sets shop size
   buyImage.resizeNN(buyImage.width*1.7, buyImage.height*1.7);
   upgradeImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
   clickedUpgradeImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
-  // playImage.resizeNN()
+  playImage.resizeNN(minHeightWidth/4, minHeightWidth/8);
+  clickedPlayImage.resizeNN(minHeightWidth/4-10, minHeightWidth/8-10);
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   upgradeButton = new SquareButton(width-50, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
-  // playButton = new SquareButton(cookieButton.x, cookieButton.y+200, , );
+  playButton = new SquareButton(cookieButton.x, cookieButton.y+200, playImage, clickedPlayImage, playImage.width, playImage.height);
   buyButtonSetup();
 }
 
 function draw() { //displays buttons and text
   background(15, 155, 219);
   cookieButton.display();
-  shopButton.display();
-  upgradeButton.display();
 
-  displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + floor(cookieCounter).toLocaleString() , minHeightWidth/14, "white", CENTER, CENTER);
-  if (managerWasPurchased) {
-    displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + ((cookiesPerSecond + (cookiesPerSecond/4)).toFixed(1)).toLocaleString(), minHeightWidth/28, "white", CENTER, CENTER);
-  } else {
-    displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + (cookiesPerSecond.toFixed(1)).toLocaleString(), minHeightWidth/28, "white", CENTER, CENTER);
+  if (isTitleScreen) {
+    playButton.display();
+    displayText(width/2, cookieButton.y-cookieButton.radius*2, "Welcome to Cookie Clicker!", minHeightWidth/14, "white", CENTER, CENTER);
+  } 
+  else {
+    shopButton.display();
+    upgradeButton.display();
+
+    displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + floor(cookieCounter).toLocaleString() , minHeightWidth/14, "white", CENTER, CENTER);
+    if (managerWasPurchased) {
+      displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + ((cookiesPerSecond + (cookiesPerSecond/4)).toFixed(1)).toLocaleString(), minHeightWidth/28, "white", CENTER, CENTER);
+    } else {
+      displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond.toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
+    }
   }
 
   if (millis() >= cpsTime) {
@@ -118,53 +126,56 @@ function buyButtonSetup() {
 }
 
 function mousePressed() { //this determines what happens when you interact with the buttons
-  if (cookieButton.mouseDetected()) {
-    cookieCounter += cookiesPerClick;
-    cookieButton.buttonPressed();
-    clickSound.play();
-  }
+  if (isTitleScreen) {
+    if (playButton.mouseDetected()) {
+      playButton.buttonPressed();
+      backgroundMusic.loop();
+      isTitleScreen = false;
+    }
+  } else {
+    if (cookieButton.mouseDetected()) {
+      cookieCounter += cookiesPerClick;
+      cookieButton.buttonPressed();
+      clickSound.play();
+    }
 
-  if (shopButton.mouseDetected()) {
-    shopButton.buttonPressed();
-    isShop = !isShop;
-    isUpgrade = false;
-    popSound.play();
-  }
+    if (shopButton.mouseDetected()) { //opens/closes shop
+      shopButton.buttonPressed();
+      isShop = !isShop;
+      isUpgrade = false;
+      popSound.play();
+    }
 
-  if (upgradeButton.mouseDetected()) {
-    upgradeButton.buttonPressed();
-    isUpgrade = !isUpgrade;
-    isShop = false;
-    popSound.play();
-  }
+    if (upgradeButton.mouseDetected()) { //opens/closes upgrade shop
+      upgradeButton.buttonPressed();
+      isUpgrade = !isUpgrade;
+      isShop = false;
+      popSound.play();
+    }
 
-  if (tempButton.mouseDetected()) { //temporary, delete after title added
-    tempButton.buttonPressed();
-    backgroundMusic.loop();
-  }
+    for (let i=0; i<7; i++) { //checks buy buttons from both shops for any purchases
+      if (buyButtonArray[i].mouseDetected()) {
+        if (cookieCounter >= shopPriceArray[i] && isShop) {
+          buySound.play();
+          buyButtonArray[i].buttonPressed();
+          cookieCounter -= shopPriceArray[i];
+          cookiesPerSecond += shopCpsArray[i];
+          shopPriceArray[i] *= priceMultiplier;
+        }
 
-  for (let i=0; i<7; i++) {
-    if (buyButtonArray[i].mouseDetected()) {
-      if (cookieCounter >= shopPriceArray[i] && isShop) {
-        buySound.play();
-        buyButtonArray[i].buttonPressed();
-        cookieCounter -= shopPriceArray[i];
-        cookiesPerSecond += shopCpsArray[i];
-        shopPriceArray[i] *= priceMultiplier;
-      }
-
-      if (cookieCounter >= upgradePriceArray[i] && isUpgrade) {
-        buySound.play();
-        buyButtonArray[i].buttonPressed();
-        cookieCounter -= upgradePriceArray[i];
-        upgradePriceArray[i] *= upgradePriceMultiplier;
-        switch (true) {
-          case i<1:
-            cookiesPerClick *= 2;
-            break;
-          case i<7:
-            shopCpsArray[i] *= 2;
-            break;
+        if (cookieCounter >= upgradePriceArray[i] && isUpgrade) {
+          buySound.play();
+          buyButtonArray[i].buttonPressed();
+          cookieCounter -= upgradePriceArray[i];
+          upgradePriceArray[i] *= upgradePriceMultiplier;
+          switch (true) {
+            case i<1:
+              cookiesPerClick *= 2;
+              break;
+            case i<7:
+              shopCpsArray[i] *= 2;
+              break;
+          }
         }
       }
     }

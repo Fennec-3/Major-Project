@@ -1,4 +1,4 @@
-class CircleButton { //class for all the buttons
+class CircleButton { //class for all the circle buttons
     constructor(x, y, theImage, clickedImage) {
       this.x = x;
       this.y = y;
@@ -31,7 +31,7 @@ class CircleButton { //class for all the buttons
     }
   }
   
-  class SquareButton extends CircleButton {
+  class SquareButton extends CircleButton { //class for all the square buttons
     constructor(x, y, theImage, clickedImage, buttonWidth, buttonHeight) {
       super(x, y, theImage, clickedImage);
       this.x = x;

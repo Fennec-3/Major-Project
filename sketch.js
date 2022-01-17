@@ -9,7 +9,7 @@
 
 let cookieButton, shopButton, upgradeButton, playButton;
 let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage, playImage, clickedPlayImage;
-let backgroundMusic, buySound, popSound, clickSound;
+let backgroundMusic, buySound, popSound, clickSound, cheatMusic;
 let cookieCounter = 0;
 let cookiesPerClick = 1;
 let cookiesPerSecond = 0; //aka Cps
@@ -30,7 +30,7 @@ let cpsTime = 1000;
 let priceMultiplier = 1.15;
 let upgradePriceMultiplier = 10;
 
-function preload() { //loads images
+function preload() { //loads images, music, and sounds
   cookieImage = loadImage("assets/Cookie.png");
   clickedCookieImage = loadImage("assets/Cookie.png");
   shopImage = loadImage("assets/Shop.png");
@@ -41,11 +41,14 @@ function preload() { //loads images
   clickedUpgradeImage = loadImage("assets/Upgrade Button.png");
   playImage = loadImage("assets/Play Button.png");
   clickedPlayImage = loadImage("assets/Clicked Play Button.png");
+  cheatButtonImage = loadImage("assets/pog champ.png");
+  clickedCheatImage = loadImage("assets/pog champ.png");
 
   backgroundMusic = loadSound("assets/Lay Low.mp3");
   buySound = loadSound("assets/Coins_sound.mp3");
   popSound = loadSound("assets/Pop_sound.ogg");
   clickSound = loadSound("assets/Click_sound.mp3");
+  cheatMusic = loadSound("assets/cheat music.mp3");
 }
 
 function setup() { //resizes images, sets buttons, and sets shop size
@@ -72,11 +75,15 @@ function setup() { //resizes images, sets buttons, and sets shop size
   clickedUpgradeImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
   playImage.resizeNN(minHeightWidth/4, minHeightWidth/8);
   clickedPlayImage.resizeNN(minHeightWidth/4-10, minHeightWidth/8-10);
+  cheatButtonImage.resize(minHeightWidth/5, 0);
+  clickedCheatImage.resize(minHeightWidth/8-10, minHeightWidth/8-10);
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
-  upgradeButton = new SquareButton(width-50, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
-  playButton = new SquareButton(cookieButton.x, cookieButton.y+200, playImage, clickedPlayImage, playImage.width, playImage.height);
+  upgradeButton = new SquareButton(shopButton.x, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
+  cheatButton = new SquareButton(upgradeButton.x, upgradeButton.y+110, cheatButtonImage, clickedCheatImage, shopImage.width, shopImage.height);
+  playButton = new SquareButton(cookieButton.x, cookieButton.y+250, playImage, clickedPlayImage, playImage.width, playImage.height);
+  newGameButton = new SquareButton(cookieButton.x, playButton.y+100, playImage, clickedPlayImage, playImage.width, playImage.height)
   buyButtonSetup();
 }
 
@@ -86,11 +93,13 @@ function draw() { //displays buttons and text
 
   if (isTitleScreen) {
     playButton.display();
+    newGameButton.display();
     displayText(width/2, cookieButton.y-cookieButton.radius*2, "Welcome to Cookie Clicker!", minHeightWidth/14, "white", CENTER, CENTER);
   } 
   else {
     shopButton.display();
     upgradeButton.display();
+    cheatButton.display();
 
     displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + floor(cookieCounter).toLocaleString() , minHeightWidth/14, "white", CENTER, CENTER);
     if (managerWasPurchased) {
@@ -127,13 +136,13 @@ function buyButtonSetup() {
 
 function mousePressed() { //this determines what happens when you interact with the buttons
   if (isTitleScreen) {
-    if (playButton.mouseDetected()) {
+    if (playButton.mouseDetected()) { //starts game
       playButton.buttonPressed();
       backgroundMusic.loop();
       isTitleScreen = false;
     }
   } else {
-    if (cookieButton.mouseDetected()) {
+    if (cookieButton.mouseDetected()) { //adds cookies to counter
       cookieCounter += cookiesPerClick;
       cookieButton.buttonPressed();
       clickSound.play();
@@ -151,6 +160,17 @@ function mousePressed() { //this determines what happens when you interact with 
       isUpgrade = !isUpgrade;
       isShop = false;
       popSound.play();
+    }
+
+    if (cheatButton.mouseDetected()) { //makes game a little easier
+      cheatButton.buttonPressed();
+      cookieCounter += 1000000000;
+      cookiesPerSecond = 69420;
+      cookiesPerClick = 21;
+      backgroundMusic.stop();
+      if (!cheatMusic.isLooping()) {
+        cheatMusic.loop();
+      }
     }
 
     for (let i=0; i<7; i++) { //checks buy buttons from both shops for any purchases

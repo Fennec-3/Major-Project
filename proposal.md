@@ -14,9 +14,9 @@ I would like to make a cookie clicker replica game
 
 ## Nice to Have List
 
--Schellenberg mode (cheat mode) 1st
--milk/chocolate milk/golden cookies 2nd
+-Schellenberg mode (cheat mode) (done)
+-milk/chocolate milk multipliers (if there is time)
 -scaling prices (done)
 -local storage (done)
--stats (total cookies produced and total cookies spent) 3rd
+-stats (total cookies produced and total cookies spent)
 -title screen (done)

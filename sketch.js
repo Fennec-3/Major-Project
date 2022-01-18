@@ -4,11 +4,11 @@
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
-// temp list of things: cookieCounter, CPS, shopPriceArray, upgradePriceArray, shopCpsArray
+//
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
 let cookieButton, shopButton, upgradeButton, playButton;
-let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage, playImage, clickedPlayImage;
+let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage, playImage, clickedPlayImage, newGameImage, clickedNewGameImage;
 let backgroundMusic, buySound, popSound, clickSound, cheatMusic;
 let cookieCounter = 0;
 let cookiesPerClick = 1;
@@ -39,8 +39,10 @@ function preload() { //loads images, music, and sounds
   clickedBuyImage = loadImage("assets/Buy Button.png");
   upgradeImage = loadImage("assets/Upgrade Button.png");
   clickedUpgradeImage = loadImage("assets/Upgrade Button.png");
-  playImage = loadImage("assets/Play Button.png");
+  playImage = loadImage("assets/Play button.png");
   clickedPlayImage = loadImage("assets/Clicked Play Button.png");
+  newGameImage = loadImage("assets/New game button.png");
+  clickedNewGameImage = loadImage("assets/New game button.png");
   cheatButtonImage = loadImage("assets/pog champ.png");
   clickedCheatImage = loadImage("assets/pog champ.png");
 
@@ -75,15 +77,17 @@ function setup() { //resizes images, sets buttons, and sets shop size
   clickedUpgradeImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
   playImage.resizeNN(minHeightWidth/4, minHeightWidth/8);
   clickedPlayImage.resizeNN(minHeightWidth/4-10, minHeightWidth/8-10);
+  newGameImage.resizeNN(minHeightWidth/4-20, minHeightWidth/8-20);
+  clickedNewGameImage.resizeNN(minHeightWidth/4-30, minHeightWidth/8-30);
   cheatButtonImage.resize(minHeightWidth/5, 0);
-  clickedCheatImage.resize(minHeightWidth/8-10, minHeightWidth/8-10);
+  clickedCheatImage.resize(minHeightWidth/2, minHeightWidth/8);
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   upgradeButton = new SquareButton(shopButton.x, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
   cheatButton = new SquareButton(upgradeButton.x, upgradeButton.y+110, cheatButtonImage, clickedCheatImage, shopImage.width, shopImage.height);
   playButton = new SquareButton(cookieButton.x, cookieButton.y+250, playImage, clickedPlayImage, playImage.width, playImage.height);
-  newGameButton = new SquareButton(cookieButton.x, playButton.y+100, playImage, clickedPlayImage, playImage.width, playImage.height)
+  newGameButton = new SquareButton(cookieButton.x, playButton.y+100, newGameImage, clickedNewGameImage, newGameImage.width, newGameImage.height)
   buyButtonSetup();
 }
 
@@ -141,6 +145,20 @@ function mousePressed() { //this determines what happens when you interact with 
       backgroundMusic.loop();
       isTitleScreen = false;
     }
+
+    if (newGameButton.mouseDetected()) { //clears save data and starts game
+      newGameButton.buttonPressed();
+      cookieCounter = 0;
+      cookiesPerSecond = 0;
+      cookiesPerClick = 1;
+      shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
+      upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000];
+      shopCpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
+
+      backgroundMusic.loop();
+      isTitleScreen = false;
+    }
+
   } else {
     if (cookieButton.mouseDetected()) { //adds cookies to counter
       cookieCounter += cookiesPerClick;

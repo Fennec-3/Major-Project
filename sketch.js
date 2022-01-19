@@ -33,7 +33,7 @@ let upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000]
 let cpsTime = 1000;
 let priceMultiplier = 1.15;
 let upgradePriceMultiplier = 10;
-//comment lmao
+
 function preload() { //loads images, music, and sounds
   cookieImage = loadImage("assets/Cookie.png");
   clickedCookieImage = loadImage("assets/Cookie.png");
@@ -107,7 +107,7 @@ function setup() { //resizes images, sets buttons and shop size, loads save data
   buyButtonSetup();
 }
 
-function draw() { //displays buttons and text
+function draw() { //displays buttons and text, adds cps, and stores items
   background(15, 155, 219);
   cookieButton.display();
 
@@ -126,13 +126,13 @@ function draw() { //displays buttons and text
     displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond.toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
   }
 
-  showShop();
-
   if (millis() >= cpsTime) {
     cpsTime += 1000;
     cookieCounter +=  cookiesPerSecond;
     totalCookiesMade += cookiesPerSecond;
   }
+
+  showShop();
 
   storeItem("cookies", cookieCounter);
   storeItem("cps", cookiesPerSecond);
@@ -140,9 +140,15 @@ function draw() { //displays buttons and text
   storeItem("shopPrices", shopPriceArray);
   storeItem("upgradePrices", upgradePriceArray);
   storeItem("cpsArray", shopCpsArray);
+
+  storeItem("totalCookies", totalCookiesMade);
+  storeItem("cookiesSpent", totalCookiesSpent);
+  storeItem("timesClicked", timesClicked);
+  storeItem("buildingsPurchased", buildingsPurchased);
+  storeItem("upgradesPurchased", upgradesPurchased);
 }
 
-function buyButtonSetup() {
+function buyButtonSetup() { //creates the buy buttons for the shops
   for (let i=0; i<shopHeight; i+=shopHeight/7) {
     let buyButton = new SquareButton(shopWidth-20, i+shopHeight/7.4, buyImage, clickedBuyImage, buyImage.width, buyImage.height);
     buyButtonArray.push(buyButton);
@@ -180,7 +186,7 @@ function mousePressed() { //this determines what happens when you interact with 
       clickSound.play();
     }
 
-    if (shopButton.mouseDetected()) { //opens/closes shop
+    if (shopButton.mouseDetected()) { //opens/closes building shop
       shopButton.buttonPressed();
       isShop = !isShop;
       isUpgrade = false;
@@ -203,6 +209,12 @@ function mousePressed() { //this determines what happens when you interact with 
       if (!cheatMusic.isLooping()) {
         cheatMusic.loop();
       }
+    }
+
+    if (statsButton.mouseDetected()) {
+      statsButton.buttonPressed();
+      isStats = !isStats;
+      popSound.play();
     }
 
     for (let i=0; i<7; i++) { //checks buy buttons from both shops for any purchases
@@ -276,11 +288,5 @@ function showShop() { //displays building shop or upgrade shop
       displayText(shopLocation+10, shopLocation+i+30, "Price: " + upgradePriceArray[i/(shopHeight/7)].toLocaleString(), 13, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+45, upgradeDescriptionArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
     }
-  }
-}
-
-function displayStats() {
-  if (isStats) {
-    rect(statsButton.x+100, height-(height/8), 50, 100);
   }
 }

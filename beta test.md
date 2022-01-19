@@ -7,3 +7,8 @@
 ## Nima B (little to no coding knowledge)
 -Make everything fit on screen better
 -make cookie bigger
+-fix sound glitch
+
+## Md S.
+ -Maybe some tab to give instructions (was confused about how to use shop)
+ -Maybe an options menu to turn down music and other controls

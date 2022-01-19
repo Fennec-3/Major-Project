@@ -7,25 +7,29 @@
 //
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
-let cookieButton, shopButton, upgradeButton, playButton;
-let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage, playImage, clickedPlayImage, newGameImage, clickedNewGameImage;
+let cookieButton, shopButton, upgradeButton, playButton, cheatButton, newGameButton, statsButton;
+let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage, playImage, clickedPlayImage, newGameImage, clickedNewGameImage, statsImage, clickedStatsImage;
 let backgroundMusic, buySound, popSound, clickSound, cheatMusic;
 let cookieCounter = 0;
 let cookiesPerClick = 1;
 let cookiesPerSecond = 0; //aka Cps
-let minHeightWidth, shopHeight, shopWidth;
+let minHeightWidth, shopHeight, shopWidth, shopLocation;
 let isTitleScreen = true;
 let isShop = false;
 let isUpgrade = false;
-let shopLocation = 10;
+let isStats = false;
+let totalCookiesMade = 0;
+let totalCookiesSpent = 0;
+let timesClicked = 0;
+let buildingsPurchased = 0;
+let upgradesPurchased = 0;
 let buyButtonArray = [];
 let shopItemArray = ["Cookie Oven", "Cookie Farm", "Cookie Mine", "Cookie Factory", "Cookie Embezzlement", "Cookie Laundering", "Cookie Corporation"];
 let shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
 let shopCpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
 let upgradeItemArray = ["Stronger Fingers", "More Farmers", "Cookie Drills", "OSHA Approved Factory", "Slight of Hand", "Smooth Criminal", "Political Influence"];
-let upgradeDescriptionArray = ["2x Cookies Per Click", "New farms are twice as efficient", "New mines are twice as efficient", "New factories are twice as efficient", "Embezzle twice as many cookies", "New Laundering facilities are twice as efficient", "New corporations are twice as efficient"];
+let upgradeDescriptionArray = ["2x Cookies Per Click", "New farms are 2x as efficient", "New mines are 2x as efficient", "New factories are 2x as efficient", "Embezzle 2x as many cookies", "New Laundering facilities are 2x as efficient", "New corporations are 2x as efficient"];
 let upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000];
-let managerWasPurchased = false;
 let cpsTime = 1000;
 let priceMultiplier = 1.15;
 let upgradePriceMultiplier = 10;
@@ -45,6 +49,8 @@ function preload() { //loads images, music, and sounds
   clickedNewGameImage = loadImage("assets/New game button.png");
   cheatButtonImage = loadImage("assets/pog champ.png");
   clickedCheatImage = loadImage("assets/pog champ.png");
+  statsImage = loadImage("assets/Stats image.png");
+  clickedStatsImage = loadImage("assets/Stats image.png");
 
   backgroundMusic = loadSound("assets/Lay Low.mp3");
   buySound = loadSound("assets/Coins_sound.mp3");
@@ -53,11 +59,12 @@ function preload() { //loads images, music, and sounds
   cheatMusic = loadSound("assets/cheat music.mp3");
 }
 
-function setup() { //resizes images, sets buttons, and sets shop size
+function setup() { //resizes images, sets buttons and shop size, loads save data
   createCanvas(windowWidth, windowHeight);
   minHeightWidth = min(height, width);
   shopWidth = width/5;
   shopHeight = height/1.4;
+  shopLocation = 10;
 
   if (getItem("cookies") !== null) {
     cookieCounter = getItem("cookies");
@@ -66,6 +73,12 @@ function setup() { //resizes images, sets buttons, and sets shop size
     shopPriceArray = getItem("shopPrices");
     upgradePriceArray = getItem("upgradePrices");
     shopCpsArray = getItem("cpsArray");
+
+    totalCookiesMade = getItem("totalCookies");
+    totalCookiesSpent = getItem("cookiesSpent");
+    timesClicked = getItem("timesClicked");
+    buildingsPurchased = getItem("buildingsPurchased");
+    upgradesPurchased = getItem("upgradesPurchased");
   }
 
   cookieImage.resizeNN(minHeightWidth/3, minHeightWidth/3);
@@ -81,13 +94,16 @@ function setup() { //resizes images, sets buttons, and sets shop size
   clickedNewGameImage.resizeNN(minHeightWidth/4-30, minHeightWidth/8-30);
   cheatButtonImage.resize(minHeightWidth/5, 0);
   clickedCheatImage.resize(minHeightWidth/2, minHeightWidth/8);
+  statsImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
+  clickedStatsImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
 
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   upgradeButton = new SquareButton(shopButton.x, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
   cheatButton = new SquareButton(upgradeButton.x, upgradeButton.y+110, cheatButtonImage, clickedCheatImage, shopImage.width, shopImage.height);
   playButton = new SquareButton(cookieButton.x, cookieButton.y+250, playImage, clickedPlayImage, playImage.width, playImage.height);
-  newGameButton = new SquareButton(cookieButton.x, playButton.y+100, newGameImage, clickedNewGameImage, newGameImage.width, newGameImage.height)
+  newGameButton = new SquareButton(cookieButton.x, playButton.y+100, newGameImage, clickedNewGameImage, newGameImage.width, newGameImage.height);
+  statsButton = new SquareButton(50, height-50, statsImage, clickedStatsImage, statsImage.width, statsImage.height);
   buyButtonSetup();
 }
 
@@ -104,24 +120,19 @@ function draw() { //displays buttons and text
     shopButton.display();
     upgradeButton.display();
     cheatButton.display();
+    statsButton.display();
 
     displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.5, "Cookies: " + floor(cookieCounter).toLocaleString() , minHeightWidth/14, "white", CENTER, CENTER);
-    if (managerWasPurchased) {
-      displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + ((cookiesPerSecond + (cookiesPerSecond/4)).toFixed(1)).toLocaleString(), minHeightWidth/28, "white", CENTER, CENTER);
-    } else {
-      displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond.toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
-    }
+    displayText(cookieButton.x, cookieButton.y-cookieButton.radius*1.15, "Cps: " + cookiesPerSecond.toFixed(1), minHeightWidth/28, "white", CENTER, CENTER);
   }
+
+  showShop();
 
   if (millis() >= cpsTime) {
     cpsTime += 1000;
-    if (managerWasPurchased) {
-      cookieCounter +=  cookiesPerSecond + (cookiesPerSecond/4);
-    } else {
-      cookieCounter +=  cookiesPerSecond
-    }
+    cookieCounter +=  cookiesPerSecond;
+    totalCookiesMade += cookiesPerSecond;
   }
-  showShop();
 
   storeItem("cookies", cookieCounter);
   storeItem("cps", cookiesPerSecond);
@@ -139,6 +150,8 @@ function buyButtonSetup() {
 }
 
 function mousePressed() { //this determines what happens when you interact with the buttons
+  timesClicked++;
+
   if (isTitleScreen) {
     if (playButton.mouseDetected()) { //starts game
       playButton.buttonPressed();
@@ -162,6 +175,7 @@ function mousePressed() { //this determines what happens when you interact with 
   } else {
     if (cookieButton.mouseDetected()) { //adds cookies to counter
       cookieCounter += cookiesPerClick;
+      totalCookiesMade += cookiesPerClick;
       cookieButton.buttonPressed();
       clickSound.play();
     }
@@ -197,15 +211,19 @@ function mousePressed() { //this determines what happens when you interact with 
           buySound.play();
           buyButtonArray[i].buttonPressed();
           cookieCounter -= shopPriceArray[i];
+          totalCookiesSpent += shopPriceArray[i];
           cookiesPerSecond += shopCpsArray[i];
           shopPriceArray[i] *= priceMultiplier;
+          buildingsPurchased++;
         }
 
         if (cookieCounter >= upgradePriceArray[i] && isUpgrade) {
           buySound.play();
           buyButtonArray[i].buttonPressed();
           cookieCounter -= upgradePriceArray[i];
+          totalCookiesSpent += upgradePriceArray[i];
           upgradePriceArray[i] *= upgradePriceMultiplier;
+          upgradesPurchased++;
           switch (true) {
             case i<1:
               cookiesPerClick *= 2;
@@ -230,7 +248,7 @@ function displayText(x, y, words, sizeOfText, theColor, horiAlign, vertiAlign) {
   pop();
 }
 
-function showShop() { //displays building shop or upgrade shop when their button is pressed
+function showShop() { //displays building shop or upgrade shop
   if (isShop || isUpgrade) {
     strokeWeight(10);
     stroke(220);

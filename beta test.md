@@ -5,4 +5,5 @@
 -Add more upgrades to shop 
 
 ## Nima B (little to no coding knowledge)
-
+-Make everything fit on screen better
+-make cookie bigger

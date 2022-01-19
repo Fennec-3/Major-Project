@@ -33,7 +33,7 @@ let upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000]
 let cpsTime = 1000;
 let priceMultiplier = 1.15;
 let upgradePriceMultiplier = 10;
-
+//comment lmao
 function preload() { //loads images, music, and sounds
   cookieImage = loadImage("assets/Cookie.png");
   clickedCookieImage = loadImage("assets/Cookie.png");
@@ -101,7 +101,7 @@ function setup() { //resizes images, sets buttons and shop size, loads save data
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   upgradeButton = new SquareButton(shopButton.x, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
   cheatButton = new SquareButton(upgradeButton.x, upgradeButton.y+110, cheatButtonImage, clickedCheatImage, shopImage.width, shopImage.height);
-  playButton = new SquareButton(cookieButton.x, cookieButton.y+250, playImage, clickedPlayImage, playImage.width, playImage.height);
+  playButton = new SquareButton(cookieButton.x, cookieButton.y+200, playImage, clickedPlayImage, playImage.width, playImage.height);
   newGameButton = new SquareButton(cookieButton.x, playButton.y+100, newGameImage, clickedNewGameImage, newGameImage.width, newGameImage.height);
   statsButton = new SquareButton(50, height-50, statsImage, clickedStatsImage, statsImage.width, statsImage.height);
   buyButtonSetup();
@@ -276,5 +276,11 @@ function showShop() { //displays building shop or upgrade shop
       displayText(shopLocation+10, shopLocation+i+30, "Price: " + upgradePriceArray[i/(shopHeight/7)].toLocaleString(), 13, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+45, upgradeDescriptionArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
     }
+  }
+}
+
+function displayStats() {
+  if (isStats) {
+    rect(statsButton.x+100, height-(height/8), 50, 100);
   }
 }

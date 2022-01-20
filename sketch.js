@@ -23,6 +23,8 @@ let totalCookiesSpent = 0;
 let timesClicked = 0;
 let buildingsPurchased = 0;
 let upgradesPurchased = 0;
+let statNameArray = ["Total Cookies Made: ", "Cookies Spent: ", "Times Clicked: ", "Buildings Purchased: ", "Upgrades Purchased: "];
+let statArray = [];
 let buyButtonArray = [];
 let shopItemArray = ["Cookie Oven", "Cookie Farm", "Cookie Mine", "Cookie Factory", "Cookie Embezzlement", "Cookie Laundering", "Cookie Corporation"];
 let shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
@@ -81,8 +83,8 @@ function setup() { //resizes images, sets buttons and shop size, loads save data
     upgradesPurchased = getItem("upgradesPurchased");
   }
 
-  cookieImage.resizeNN(minHeightWidth/3, minHeightWidth/3);
-  clickedCookieImage.resizeNN(minHeightWidth/3-10, minHeightWidth/3-10);
+  cookieImage.resizeNN(minHeightWidth/2.5, minHeightWidth/2.5);
+  clickedCookieImage.resizeNN(minHeightWidth/2.5-10, minHeightWidth/2.5-10);
   shopImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
   clickedShopImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
   buyImage.resizeNN(buyImage.width*1.7, buyImage.height*1.7);
@@ -101,8 +103,8 @@ function setup() { //resizes images, sets buttons and shop size, loads save data
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   upgradeButton = new SquareButton(shopButton.x, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
   cheatButton = new SquareButton(upgradeButton.x, upgradeButton.y+110, cheatButtonImage, clickedCheatImage, shopImage.width, shopImage.height);
-  playButton = new SquareButton(cookieButton.x, cookieButton.y+200, playImage, clickedPlayImage, playImage.width, playImage.height);
-  newGameButton = new SquareButton(cookieButton.x, playButton.y+100, newGameImage, clickedNewGameImage, newGameImage.width, newGameImage.height);
+  playButton = new SquareButton(cookieButton.x, cookieButton.y+cookieButton.radius*1.5, playImage, clickedPlayImage, playImage.width, playImage.height);
+  newGameButton = new SquareButton(cookieButton.x, playButton.y+90, newGameImage, clickedNewGameImage, newGameImage.width, newGameImage.height);
   statsButton = new SquareButton(50, height-50, statsImage, clickedStatsImage, statsImage.width, statsImage.height);
   buyButtonSetup();
 }
@@ -114,7 +116,7 @@ function draw() { //displays buttons and text, adds cps, and stores items
   if (isTitleScreen) {
     playButton.display();
     newGameButton.display();
-    displayText(width/2, cookieButton.y-cookieButton.radius*2, "Welcome to Cookie Clicker!", minHeightWidth/14, "white", CENTER, CENTER);
+    displayText(width/2, cookieButton.y-cookieButton.radius*1.5, "Welcome to Cookie Clicker!", minHeightWidth/14, "white", CENTER, CENTER);
   } 
   else {
     shopButton.display();
@@ -132,7 +134,7 @@ function draw() { //displays buttons and text, adds cps, and stores items
     totalCookiesMade += cookiesPerSecond;
   }
 
-  showShop();
+  openWindow();
 
   storeItem("cookies", cookieCounter);
   storeItem("cps", cookiesPerSecond);
@@ -140,12 +142,14 @@ function draw() { //displays buttons and text, adds cps, and stores items
   storeItem("shopPrices", shopPriceArray);
   storeItem("upgradePrices", upgradePriceArray);
   storeItem("cpsArray", shopCpsArray);
-
+  
   storeItem("totalCookies", totalCookiesMade);
   storeItem("cookiesSpent", totalCookiesSpent);
   storeItem("timesClicked", timesClicked);
   storeItem("buildingsPurchased", buildingsPurchased);
   storeItem("upgradesPurchased", upgradesPurchased);
+
+  statArray = [totalCookiesMade, totalCookiesSpent, timesClicked, buildingsPurchased, upgradesPurchased];
 }
 
 function buyButtonSetup() { //creates the buy buttons for the shops
@@ -174,6 +178,12 @@ function mousePressed() { //this determines what happens when you interact with 
       upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000];
       shopCpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
 
+      totalCookiesMade = 0;
+      totalCookiesSpent = 0;
+      timesClicked = 0;
+      buildingsPurchased = 0;
+      upgradesPurchased = 0;
+
       backgroundMusic.loop();
       isTitleScreen = false;
     }
@@ -190,6 +200,7 @@ function mousePressed() { //this determines what happens when you interact with 
       shopButton.buttonPressed();
       isShop = !isShop;
       isUpgrade = false;
+      isStats = false;
       popSound.play();
     }
 
@@ -197,6 +208,7 @@ function mousePressed() { //this determines what happens when you interact with 
       upgradeButton.buttonPressed();
       isUpgrade = !isUpgrade;
       isShop = false;
+      isStats = false;
       popSound.play();
     }
 
@@ -211,9 +223,11 @@ function mousePressed() { //this determines what happens when you interact with 
       }
     }
 
-    if (statsButton.mouseDetected()) {
+    if (statsButton.mouseDetected()) { //opens stat window
       statsButton.buttonPressed();
       isStats = !isStats;
+      isShop = false;
+      isUpgrade = false;
       popSound.play();
     }
 
@@ -260,8 +274,8 @@ function displayText(x, y, words, sizeOfText, theColor, horiAlign, vertiAlign) {
   pop();
 }
 
-function showShop() { //displays building shop or upgrade shop
-  if (isShop || isUpgrade) {
+function openWindow() { //opens a window when a button is pressed
+  if (isShop || isUpgrade || isStats) {
     strokeWeight(10);
     stroke(220);
     rect(shopLocation, shopLocation, shopWidth, shopHeight);
@@ -287,6 +301,12 @@ function showShop() { //displays building shop or upgrade shop
       displayText(shopLocation+10, shopLocation+i+10, upgradeItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+30, "Price: " + upgradePriceArray[i/(shopHeight/7)].toLocaleString(), 13, "black", LEFT, TOP);
       displayText(shopLocation+10, shopLocation+i+45, upgradeDescriptionArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
+    }
+  }
+
+  if (isStats) {
+    for (let i=0; i<statArray.length; i++) {
+      displayText(shopLocation+10, shopLocation+(i+1)*20, statNameArray[i]+statArray[i].toLocaleString(), 13, "black", LEFT, TOP);
     }
   }
 }

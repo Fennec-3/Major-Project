@@ -18,5 +18,5 @@ I would like to make a cookie clicker replica game
 -milk/chocolate milk multipliers (if there is time)
 -scaling prices (done)
 -local storage (done)
--stats (total cookies produced and total cookies spent etc)
+-stats (total cookies produced and total cookies spent etc) (done)
 -title screen (done)

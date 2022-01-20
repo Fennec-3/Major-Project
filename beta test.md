@@ -5,8 +5,8 @@
 -Add more upgrades to shop 
 
 ## Nima B (little to no coding knowledge)
--Make everything fit on screen better
--make cookie bigger
+-Make everything fit on screen better (done)
+-make cookie bigger (done)
 -fix sound glitch
 
 ## Md S. (has coding experience, but hasn't seen my code before)

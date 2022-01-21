@@ -35,7 +35,7 @@ let upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000]
 let cpsTime = 1000;
 let priceMultiplier = 1.15;
 let upgradePriceMultiplier = 10;
-let instructions = "Welcome to Cookie Clicker! In this game, cookies are EVERYTHING, so get as many as you can by clicking the massive cookie button on your screen. Once you've made some cookies, use them to buy buildings from the Shop, these buildings will then make cookies on their own. Buy Upgrades to make your buildings more efficient."
+let instructions = "Welcome to Cookie Clicker! In this game, cookies are EVERYTHING, so get as many as you can by clicking the massive cookie  on your screen. Once you've made some cookies, use them to buy buildings from the Shop, these buildings will then make cookies for you on their own. Buy Upgrades to make your buildings more efficient."
 
 function preload() { //loads images, music, and sounds
   cookieImage = loadImage("assets/Cookie.png");
@@ -118,13 +118,10 @@ function draw() { //displays buttons and text, adds cps, and stores items
     playButton.display();
     newGameButton.display();
     displayText(width/2, cookieButton.y-cookieButton.radius*1.5, "Welcome to Cookie Clicker!", minHeightWidth/14, "white", CENTER, CENTER);
-    push();
-    strokeWeight(10);
-    stroke(0);
-    fill(0, 90);
-    rect(shopLocation, height-(shopHeight/3 + shopLocation), shopWidth, shopHeight/3);
-    pop();
-  } 
+
+    displayInstructions();
+  }
+
   else {
     shopButton.display();
     upgradeButton.display();
@@ -271,6 +268,23 @@ function mousePressed() { //this determines what happens when you interact with 
   }
 }
 
+function displayInstructions() { //displays instructions message on title screen
+  push();
+  //text box
+  strokeWeight(10);
+  stroke(0);
+  fill(0, 90);
+  rect(shopLocation, height-(shopHeight/2.5 + shopLocation), shopWidth, shopHeight/2.5);
+
+  //text
+  noStroke();
+  textSize(minHeightWidth/46);
+  fill(255);
+  textWrap(WORD);
+  text(instructions, shopLocation*2, height-(shopHeight/2.5), shopWidth-shopLocation);
+  pop();
+}
+
 function displayText(x, y, words, sizeOfText, theColor, horiAlign, vertiAlign) { //displays text
   push();
   fill(theColor);
@@ -291,7 +305,11 @@ function openWindow() { //opens a window when a button is pressed
 
   if (isShop) {
     for (let i=0; i<shopHeight; i+=shopHeight/7) {
-      fill("white");
+      if (cookieCounter >= shopPriceArray[i/(shopHeight/7)]) {
+        fill("white");
+      } else {
+        fill(140);
+      }
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
       displayText(shopLocation+10, shopLocation+i+10, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
@@ -302,7 +320,11 @@ function openWindow() { //opens a window when a button is pressed
 
   if (isUpgrade) {
     for (let i=0; i<shopHeight; i+=shopHeight/7) {
-      fill("white");
+      if (cookieCounter >= upgradePriceArray[i/(shopHeight/7)]) {
+        fill("white");
+      } else {
+        fill(100);
+      }
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
       displayText(shopLocation+10, shopLocation+i+10, upgradeItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
@@ -314,6 +336,7 @@ function openWindow() { //opens a window when a button is pressed
   if (isStats) {
     strokeWeight(10);
     stroke(220);
+    fill("white");
     rect(shopLocation, shopLocation, shopWidth, shopHeight/4);
     for (let i=0; i<statArray.length; i++) {
       displayText(shopLocation+10, shopLocation+(i+1)*20, statNameArray[i]+statArray[i].toLocaleString(), 13, "black", LEFT, TOP);

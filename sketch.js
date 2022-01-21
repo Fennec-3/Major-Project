@@ -9,7 +9,7 @@
 
 let cookieButton, shopButton, upgradeButton, playButton, cheatButton, newGameButton, statsButton;
 let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage, playImage, clickedPlayImage, newGameImage, clickedNewGameImage, statsImage, clickedStatsImage;
-let backgroundMusic, buySound, popSound, clickSound, cheatMusic;
+let buySound, popSound, clickSound, cheatMusic;
 let cookieCounter = 0;
 let cookiesPerClick = 1;
 let cookiesPerSecond = 0; //aka Cps
@@ -55,7 +55,6 @@ function preload() { //loads images, music, and sounds
   statsImage = loadImage("assets/Stats image.png");
   clickedStatsImage = loadImage("assets/Stats image.png");
 
-  backgroundMusic = loadSound("assets/Lay Low.mp3");
   buySound = loadSound("assets/Coins_sound.mp3");
   popSound = loadSound("assets/Pop_sound.ogg");
   clickSound = loadSound("assets/Click_sound.mp3");
@@ -169,7 +168,6 @@ function mousePressed() { //this determines what happens when you interact with 
   if (isTitleScreen) {
     if (playButton.mouseDetected()) { //starts game
       playButton.buttonPressed();
-      backgroundMusic.loop();
       isTitleScreen = false;
     }
 
@@ -188,7 +186,6 @@ function mousePressed() { //this determines what happens when you interact with 
       buildingsPurchased = 0;
       upgradesPurchased = 0;
 
-      backgroundMusic.loop();
       isTitleScreen = false;
     }
 
@@ -221,7 +218,6 @@ function mousePressed() { //this determines what happens when you interact with 
       cookieCounter += 1000000000;
       cookiesPerSecond = 69420;
       cookiesPerClick = 21;
-      backgroundMusic.stop();
       if (!cheatMusic.isLooping()) {
         cheatMusic.loop();
       }
@@ -308,7 +304,7 @@ function openWindow() { //opens a window when a button is pressed
       if (cookieCounter >= shopPriceArray[i/(shopHeight/7)]) {
         fill("white");
       } else {
-        fill(140);
+        fill(160);
       }
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
@@ -323,7 +319,7 @@ function openWindow() { //opens a window when a button is pressed
       if (cookieCounter >= upgradePriceArray[i/(shopHeight/7)]) {
         fill("white");
       } else {
-        fill(100);
+        fill(160);
       }
       rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
       buyButtonArray[floor(i/(shopHeight/7))].display();
@@ -339,7 +335,7 @@ function openWindow() { //opens a window when a button is pressed
     fill("white");
     rect(shopLocation, shopLocation, shopWidth, shopHeight/4);
     for (let i=0; i<statArray.length; i++) {
-      displayText(shopLocation+10, shopLocation+(i+1)*20, statNameArray[i]+statArray[i].toLocaleString(), 13, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation+(i+1)*20, statNameArray[i]+floor(statArray[i]).toLocaleString(), 13, "black", LEFT, TOP);
     }
   }
 }

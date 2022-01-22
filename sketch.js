@@ -17,6 +17,8 @@ let minHeightWidth, shopHeight, shopWidth, shopLocation;
 let isTitleScreen = true;
 let isShop = false;
 let isUpgrade = false;
+let secondShopPage = false;
+let secondUpgradePage = false;
 let isStats = false;
 let totalCookiesMade = 0;
 let totalCookiesSpent = 0;

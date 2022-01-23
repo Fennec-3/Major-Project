@@ -7,8 +7,8 @@
 //
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
-let cookieButton, shopButton, upgradeButton, playButton, cheatButton, newGameButton, statsButton;
-let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage, playImage, clickedPlayImage, newGameImage, clickedNewGameImage, statsImage, clickedStatsImage;
+let cookieButton, shopButton, upgradeButton, playButton, cheatButton, newGameButton, statsButton, upArrowButton, downArrowButton;
+let cookieImage, clickedCookieImage, shopImage, clickedShopImage, buyImage, clickedBuyImage, upgradeImage, clickedUpgradeImage, playImage, clickedPlayImage, newGameImage, clickedNewGameImage, statsImage, clickedStatsImage, upArrowImage, clickedUpArrowImage, downArrowImage, clickedDownArrowImage;
 let buySound, popSound, clickSound, cheatMusic;
 let cookieCounter = 0;
 let cookiesPerClick = 1;
@@ -56,6 +56,10 @@ function preload() { //loads images, music, and sounds
   clickedCheatImage = loadImage("assets/pog champ.png");
   statsImage = loadImage("assets/Stats image.png");
   clickedStatsImage = loadImage("assets/Stats image.png");
+  upArrowImage = loadImage("assets/up Arrow.png");
+  clickedUpArrowImage = loadImage("assets/up Arrow.png");
+  downArrowImage = loadImage("assets/down Arrow.png");
+  clickedDownArrowImage = loadImage("assets/down Arrow.png");
 
   buySound = loadSound("assets/Coins_sound.mp3");
   popSound = loadSound("assets/Pop_sound.ogg");
@@ -70,6 +74,7 @@ function setup() { //resizes images, sets buttons and shop size, loads save data
   shopHeight = height/1.4;
   shopLocation = 10;
 
+  //loading save data
   if (getItem("cookies") !== null) {
     cookieCounter = getItem("cookies");
     cookiesPerSecond = getItem("cps");
@@ -85,6 +90,7 @@ function setup() { //resizes images, sets buttons and shop size, loads save data
     upgradesPurchased = getItem("upgradesPurchased");
   }
 
+  //resizing images
   cookieImage.resizeNN(minHeightWidth/2.5, minHeightWidth/2.5);
   clickedCookieImage.resizeNN(minHeightWidth/2.5-10, minHeightWidth/2.5-10);
   shopImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
@@ -100,7 +106,12 @@ function setup() { //resizes images, sets buttons and shop size, loads save data
   clickedCheatImage.resize(minHeightWidth/2, minHeightWidth/8);
   statsImage.resizeNN(minHeightWidth/8, minHeightWidth/8);
   clickedStatsImage.resizeNN(minHeightWidth/8-10, minHeightWidth/8-10);
+  upArrowImage.resizeNN(minHeightWidth/16, minHeightWidth/16);
+  clickedUpArrowImage.resizeNN(minHeightWidth/16-10, minHeightWidth/16-10);
+  downArrowImage.resizeNN(minHeightWidth/16, minHeightWidth/16);
+  clickedDownArrowImage.resizeNN(minHeightWidth/16-10, minHeightWidth/16-10);
 
+  //button setup
   cookieButton = new CircleButton(width/2, height/2, cookieImage, clickedCookieImage);
   shopButton = new SquareButton(width-50, 50, shopImage, clickedShopImage, shopImage.width, shopImage.height);
   upgradeButton = new SquareButton(shopButton.x, shopButton.y*3, upgradeImage, clickedUpgradeImage, upgradeImage.width, upgradeImage.height);
@@ -108,10 +119,12 @@ function setup() { //resizes images, sets buttons and shop size, loads save data
   playButton = new SquareButton(cookieButton.x, cookieButton.y+cookieButton.radius*1.5, playImage, clickedPlayImage, playImage.width, playImage.height);
   newGameButton = new SquareButton(cookieButton.x, playButton.y+90, newGameImage, clickedNewGameImage, newGameImage.width, newGameImage.height);
   statsButton = new SquareButton(50, height-50, statsImage, clickedStatsImage, statsImage.width, statsImage.height);
+  upArrowButton = new SquareButton(shopWidth*1.15, shopHeight-upArrowImage.height*1.3, upArrowImage, clickedUpArrowImage, upArrowImage.width, upArrowImage.height);
+  downArrowButton = new SquareButton(shopWidth*1.15, shopHeight-downArrowImage.height/3, downArrowImage, clickedDownArrowImage, downArrowImage.width, downArrowImage.height);
   buyButtonSetup();
 }
 
-function draw() { //displays buttons and text, adds cps, and stores items
+function draw() { //displays buttons and text, adds cps, and saves items to local storage
   background(15, 155, 219);
   cookieButton.display();
 
@@ -233,6 +246,24 @@ function mousePressed() { //this determines what happens when you interact with 
       popSound.play();
     }
 
+    if (upArrowButton.mouseDetected() && (isShop || isUpgrade)) {
+      upArrowButton.buttonPressed();
+      if (isShop) {
+        secondShopPage = false;
+      } else {
+        secondUpgradePage = false;
+      }
+    }
+
+    if (downArrowButton.mouseDetected() && (isShop || isUpgrade)) {
+      downArrowButton.buttonPressed();
+      if (isShop) {
+        secondShopPage = true;
+      } else {
+        secondUpgradePage = true;
+      }
+    }
+
     for (let i=0; i<7; i++) { //checks buy buttons from both shops for any purchases
       if (buyButtonArray[i].mouseDetected()) {
         if (cookieCounter >= shopPriceArray[i] && isShop) {
@@ -299,6 +330,8 @@ function openWindow() { //opens a window when a button is pressed
     stroke(220);
     rect(shopLocation, shopLocation, shopWidth, shopHeight);
     strokeWeight(2);
+    upArrowButton.display();
+    downArrowButton.display();
   }
 
   if (isShop) {

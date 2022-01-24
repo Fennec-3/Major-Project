@@ -35,6 +35,7 @@ let secondShopPriceArray = [330000000, 5100000000, 75000000000, 1000000000000, 1
 let shopCpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
 let secondShopCpsArray = [44000, 260000, 1600000, 10000000, 65000000, 430000000, 2900000000];
 let upgradeItemArray = ["Stronger Fingers", "More Farmers", "Cookie Drills", "OSHA Approved Factory", "Slight of Hand", "Smooth Criminal", "Political Influence"];
+let secondUpgradeItemArray = ["Space Race", "Hydrazine Thrusters", "Space Capitalism", ""]
 let upgradeDescriptionArray = ["2x Cookies Per Click", "New farms are 2x as efficient", "New mines are 2x as efficient", "New factories are 2x as efficient", "Embezzle 2x as many cookies", "Launder cookies 2x as fast", "New corporations are 2x as efficient"];
 let upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000];
 let secondUpgradePriceArray = [3300000000, 51000000000, 750000000000, 10000000000000, 140000000000000, 1700000000000000, 21000000000000000];

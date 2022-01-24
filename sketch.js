@@ -29,14 +29,18 @@ let statNameArray = ["Total Cookies Made: ", "Cookies Spent: ", "Times Clicked: 
 let statArray = [];
 let buyButtonArray = [];
 let shopItemArray = ["Cookie Oven", "Cookie Farm", "Cookie Mine", "Cookie Factory", "Cookie Embezzlement", "Cookie Laundering", "Cookie Corporation"];
+let secondShopItemArray = ["Cookie Space Program", "Cookie Spaceship", "Cookie Moon Colony", "Cookie Planet", "Cookie Solar System", "Cookie Galaxy", "Cookieverse"];
 let shopPriceArray = [15, 100, 1100, 12000, 130000, 1400000, 20000000];
+let secondShopPriceArray = [330000000, 5100000000, 75000000000, 1000000000000, 14000000000000, 170000000000000, 2100000000000000];
 let shopCpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
+let secondShopCpsArray = [44000, 260000, 1600000, 10000000, 65000000, 430000000, 2900000000];
 let upgradeItemArray = ["Stronger Fingers", "More Farmers", "Cookie Drills", "OSHA Approved Factory", "Slight of Hand", "Smooth Criminal", "Political Influence"];
-let upgradeDescriptionArray = ["2x Cookies Per Click", "New farms are 2x as efficient", "New mines are 2x as efficient", "New factories are 2x as efficient", "Embezzle 2x as many cookies", "New Laundering facilities are 2x as efficient", "New corporations are 2x as efficient"];
+let upgradeDescriptionArray = ["2x Cookies Per Click", "New farms are 2x as efficient", "New mines are 2x as efficient", "New factories are 2x as efficient", "Embezzle 2x as many cookies", "Launder cookies 2x as fast", "New corporations are 2x as efficient"];
 let upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000];
+let secondUpgradePriceArray = [3300000000, 51000000000, 750000000000, 10000000000000, 140000000000000, 1700000000000000, 21000000000000000];
 let cpsTime = 1000;
 let priceMultiplier = 1.15;
-let upgradePriceMultiplier = 10;
+let upgradePriceMultiplier = 5;
 let instructions = "Welcome to Cookie Clicker! In this game, cookies are EVERYTHING, so get as many as you can by clicking the massive cookie  on your screen. Once you've made some cookies, use them to buy buildings from the Shop, these buildings will then make cookies for you on their own. Buy Upgrades to make your buildings more efficient."
 
 function preload() { //loads images, music, and sounds
@@ -335,17 +339,34 @@ function openWindow() { //opens a window when a button is pressed
   }
 
   if (isShop) {
-    for (let i=0; i<shopHeight; i+=shopHeight/7) {
-      if (cookieCounter >= shopPriceArray[i/(shopHeight/7)]) {
-        fill("white");
-      } else {
-        fill(160);
+    if (secondShopPage === false) {
+      for (let i=0; i<shopHeight; i+=shopHeight/7) {
+        if (cookieCounter >= shopPriceArray[i/(shopHeight/7)]) {
+          fill("white");
+        } else {
+          fill(160);
+        }
+        rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
+        buyButtonArray[floor(i/(shopHeight/7))].display();
+        displayText(shopLocation+10, shopLocation+i+10, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
+        displayText(shopLocation+10, shopLocation+i+25, "Price: " + floor(shopPriceArray[i/(shopHeight/7)]).toLocaleString(), 13, "black", LEFT, TOP);
+        displayText(shopLocation+10, shopLocation+i+40, "Cps: " + shopCpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
       }
-      rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
-      buyButtonArray[floor(i/(shopHeight/7))].display();
-      displayText(shopLocation+10, shopLocation+i+10, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
-      displayText(shopLocation+10, shopLocation+i+25, "Price: " + floor(shopPriceArray[i/(shopHeight/7)]).toLocaleString(), 13, "black", LEFT, TOP);
-      displayText(shopLocation+10, shopLocation+i+40, "Cps: " + shopCpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
+    } 
+    
+    else {
+      for (let i=0; i<shopHeight; i+=shopHeight/7) {
+        if (cookieCounter >= secondShopPriceArray[i/(shopHeight/7)]) {
+          fill("white");
+        } else {
+          fill(160);
+        }
+        rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
+        buyButtonArray[floor(i/(shopHeight/7))].display();
+        displayText(shopLocation+10, shopLocation+i+10, secondShopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
+        displayText(shopLocation+10, shopLocation+i+25, "Price: " + floor(secondShopPriceArray[i/(shopHeight/7)]).toLocaleString(), 13, "black", LEFT, TOP);
+        displayText(shopLocation+10, shopLocation+i+40, "Cps: " + secondShopCpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
+      }      
     }
   }
 

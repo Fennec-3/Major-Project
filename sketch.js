@@ -444,7 +444,7 @@ function openWindow() { //opens a window when a button is pressed
     fill("white");
     rect(shopLocation, shopLocation, shopWidth, shopHeight/4);
     for (let i=0; i<statArray.length; i++) {
-      displayText(shopLocation+10, shopLocation+(i+1)*20, statNameArray[i]+floor(statArray[i]).toLocaleString(), 13, "black", LEFT, TOP);
+      displayText(shopLocation+10, shopLocation/2+(i+1)*20, statNameArray[i]+floor(statArray[i]).toLocaleString(), 13, "black", LEFT, TOP);
     }
   }
 }

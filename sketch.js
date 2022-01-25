@@ -35,8 +35,9 @@ let secondShopPriceArray = [330000000, 5100000000, 75000000000, 1000000000000, 1
 let shopCpsArray = [0.1, 1, 8, 47, 260, 1400, 7800];
 let secondShopCpsArray = [44000, 260000, 1600000, 10000000, 65000000, 430000000, 2900000000];
 let upgradeItemArray = ["Stronger Fingers", "More Farmers", "Cookie Drills", "OSHA Approved Factory", "Slight of Hand", "Smooth Criminal", "Political Influence"];
-let secondUpgradeItemArray = ["Space Race", "Hydrazine Thrusters", "Space Capitalism", ""]
+let secondUpgradeItemArray = ["Space Race", "Hydrazine Thrusters", "Space Capitalism", "Chocolate Chip Pumps", "Star Destroyer", "Galactic Federation", "Infinite Multiverse"];
 let upgradeDescriptionArray = ["2x Cookies Per Click", "New farms are 2x as efficient", "New mines are 2x as efficient", "New factories are 2x as efficient", "Embezzle 2x as many cookies", "Launder cookies 2x as fast", "New corporations are 2x as efficient"];
+let secondUpgradeDescriptionArray = ["Space Programs are 2x as fast", "Spaceships travel 2x as fast", "Moon Colonies are 2x as efficient", "Planets have 2x as much coco", "Solar Systems are 2x as efficient", "Galaxies are 2x as efficient", "Cookieverses are 2x as efficient"];
 let upgradePriceArray = [100, 1000, 11000, 120000, 1300000, 14000000, 200000000];
 let secondUpgradePriceArray = [3300000000, 51000000000, 750000000000, 10000000000000, 140000000000000, 1700000000000000, 21000000000000000];
 let cpsTime = 1000;
@@ -49,27 +50,27 @@ function preload() { //loads images, music, and sounds
   clickedCookieImage = loadImage("assets/Cookie.png");
   shopImage = loadImage("assets/Shop.png");
   clickedShopImage = loadImage("assets/Shop.png");
-  buyImage = loadImage("assets/Buy Button.png");
-  clickedBuyImage = loadImage("assets/Buy Button.png");
-  upgradeImage = loadImage("assets/Upgrade Button.png");
-  clickedUpgradeImage = loadImage("assets/Upgrade Button.png");
-  playImage = loadImage("assets/Play Button.png");
-  clickedPlayImage = loadImage("assets/Clicked Play Button.png");
-  newGameImage = loadImage("assets/New Game Button.png");
-  clickedNewGameImage = loadImage("assets/New Game Button.png");
-  cheatButtonImage = loadImage("assets/Pog Champ.png");
-  clickedCheatImage = loadImage("assets/Pog Champ.png");
-  statsImage = loadImage("assets/Stats Image.png");
-  clickedStatsImage = loadImage("assets/Stats Image.png");
-  upArrowImage = loadImage("assets/Up Arrow.png");
-  clickedUpArrowImage = loadImage("assets/Up Arrow.png");
-  downArrowImage = loadImage("assets/Down Arrow.png");
-  clickedDownArrowImage = loadImage("assets/Down Arrow.png");
+  buyImage = loadImage("assets/Buy_Button.png");
+  clickedBuyImage = loadImage("assets/Buy_Button.png");
+  upgradeImage = loadImage("assets/Upgrade_Button.png");
+  clickedUpgradeImage = loadImage("assets/Upgrade_Button.png");
+  playImage = loadImage("assets/Play_Button.png");
+  clickedPlayImage = loadImage("assets/Clicked_Play_Button.png");
+  newGameImage = loadImage("assets/New_Game_Button.png");
+  clickedNewGameImage = loadImage("assets/New_Game_Button.png");
+  cheatButtonImage = loadImage("assets/Pog_Champ.png");
+  clickedCheatImage = loadImage("assets/Pog_Champ.png");
+  statsImage = loadImage("assets/Stats_Image.png");
+  clickedStatsImage = loadImage("assets/Stats_Image.png");
+  upArrowImage = loadImage("assets/Up_Arrow.png");
+  clickedUpArrowImage = loadImage("assets/Up_Arrow.png");
+  downArrowImage = loadImage("assets/Down_Arrow.png");
+  clickedDownArrowImage = loadImage("assets/Down_Arrow.png");
 
   buySound = loadSound("assets/Coins_sound.mp3");
   popSound = loadSound("assets/Pop_sound.ogg");
   clickSound = loadSound("assets/Click_sound.mp3");
-  cheatMusic = loadSound("assets/cheat music.mp3");
+  cheatMusic = loadSound("assets/cheat_music.mp3");
 }
 
 function setup() { //resizes images, sets buttons and shop size, loads save data
@@ -235,7 +236,7 @@ function mousePressed() { //this determines what happens when you interact with 
 
     if (cheatButton.mouseDetected()) { //makes game a little easier
       cheatButton.buttonPressed();
-      cookieCounter += 1000000000;
+      cookieCounter += 1000000000000000000;
       cookiesPerSecond = 69420;
       cookiesPerClick = 21;
       if (!cheatMusic.isLooping()) {
@@ -258,6 +259,7 @@ function mousePressed() { //this determines what happens when you interact with 
       } else {
         secondUpgradePage = false;
       }
+      clickSound.play();
     }
 
     if (downArrowButton.mouseDetected() && (isShop || isUpgrade)) {
@@ -267,34 +269,63 @@ function mousePressed() { //this determines what happens when you interact with 
       } else {
         secondUpgradePage = true;
       }
+      clickSound.play();
     }
 
     for (let i=0; i<7; i++) { //checks buy buttons from both shops for any purchases
       if (buyButtonArray[i].mouseDetected()) {
         if (cookieCounter >= shopPriceArray[i] && isShop) {
-          buySound.play();
-          buyButtonArray[i].buttonPressed();
-          cookieCounter -= shopPriceArray[i];
-          totalCookiesSpent += shopPriceArray[i];
-          cookiesPerSecond += shopCpsArray[i];
-          shopPriceArray[i] *= priceMultiplier;
-          buildingsPurchased++;
+          if (secondShopPage === false) {
+            //First Shop page
+            buySound.play();
+            buyButtonArray[i].buttonPressed();
+            cookieCounter -= shopPriceArray[i];
+            totalCookiesSpent += shopPriceArray[i];
+            cookiesPerSecond += shopCpsArray[i];
+            shopPriceArray[i] *= priceMultiplier;
+            buildingsPurchased++;
+          }
+
+          //Second Shop page
+          else if (secondShopPage && cookieCounter >= secondShopPriceArray[i]){
+            buySound.play();
+            buyButtonArray[i].buttonPressed();
+            cookieCounter -= secondShopPriceArray[i];
+            totalCookiesSpent += secondShopPriceArray[i];
+            cookiesPerSecond += secondShopCpsArray[i];
+            secondShopPriceArray[i] *= priceMultiplier;
+            buildingsPurchased++;
+          }
         }
 
         if (cookieCounter >= upgradePriceArray[i] && isUpgrade) {
-          buySound.play();
-          buyButtonArray[i].buttonPressed();
-          cookieCounter -= upgradePriceArray[i];
-          totalCookiesSpent += upgradePriceArray[i];
-          upgradePriceArray[i] *= upgradePriceMultiplier;
-          upgradesPurchased++;
-          switch (true) {
-            case i<1:
-              cookiesPerClick *= 2;
-              break;
-            case i<7:
-              shopCpsArray[i] *= 2;
-              break;
+          if (secondUpgradePage === false) {
+            //First Upgrade page
+            buySound.play();
+            buyButtonArray[i].buttonPressed();
+            cookieCounter -= upgradePriceArray[i];
+            totalCookiesSpent += upgradePriceArray[i];
+            upgradePriceArray[i] *= upgradePriceMultiplier;
+            upgradesPurchased++;
+            switch (true) {
+              case i<1:
+                cookiesPerClick *= 2;
+                break;
+              case i<7:
+                shopCpsArray[i] *= 2;
+                break;
+            }
+          }
+
+          //Second Upgrade page
+          else if (secondUpgradePage && cookieCounter >= secondUpgradePriceArray[i]){
+            buySound.play();
+            buyButtonArray[i].buttonPressed();
+            cookieCounter -= secondUpgradePriceArray[i];
+            totalCookiesSpent += secondUpgradePriceArray[i];
+            secondUpgradePriceArray[i] *= upgradePriceMultiplier;
+            upgradesPurchased++;
+            secondShopCpsArray[i] *= 2;
           }
         }
       }
@@ -341,6 +372,7 @@ function openWindow() { //opens a window when a button is pressed
 
   if (isShop) {
     if (secondShopPage === false) {
+      //First shop page
       for (let i=0; i<shopHeight; i+=shopHeight/7) {
         if (cookieCounter >= shopPriceArray[i/(shopHeight/7)]) {
           fill("white");
@@ -351,10 +383,11 @@ function openWindow() { //opens a window when a button is pressed
         buyButtonArray[floor(i/(shopHeight/7))].display();
         displayText(shopLocation+10, shopLocation+i+10, shopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
         displayText(shopLocation+10, shopLocation+i+25, "Price: " + floor(shopPriceArray[i/(shopHeight/7)]).toLocaleString(), 13, "black", LEFT, TOP);
-        displayText(shopLocation+10, shopLocation+i+40, "Cps: " + shopCpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
+        displayText(shopLocation+10, shopLocation+i+40, "Cps: " + shopCpsArray[i/(shopHeight/7)].toLocaleString(), 12, "black", LEFT, TOP);
       }
     } 
-    
+
+    //Second shop page
     else {
       for (let i=0; i<shopHeight; i+=shopHeight/7) {
         if (cookieCounter >= secondShopPriceArray[i/(shopHeight/7)]) {
@@ -366,23 +399,42 @@ function openWindow() { //opens a window when a button is pressed
         buyButtonArray[floor(i/(shopHeight/7))].display();
         displayText(shopLocation+10, shopLocation+i+10, secondShopItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
         displayText(shopLocation+10, shopLocation+i+25, "Price: " + floor(secondShopPriceArray[i/(shopHeight/7)]).toLocaleString(), 13, "black", LEFT, TOP);
-        displayText(shopLocation+10, shopLocation+i+40, "Cps: " + secondShopCpsArray[i/(shopHeight/7)], 12, "black", LEFT, TOP);
+        displayText(shopLocation+10, shopLocation+i+40, "Cps: " + secondShopCpsArray[i/(shopHeight/7)].toLocaleString(), 12, "black", LEFT, TOP);
       }      
     }
   }
 
   if (isUpgrade) {
-    for (let i=0; i<shopHeight; i+=shopHeight/7) {
-      if (cookieCounter >= upgradePriceArray[i/(shopHeight/7)]) {
-        fill("white");
-      } else {
-        fill(160);
+    if (secondUpgradePage === false) {
+      //First upgrade page
+      for (let i=0; i<shopHeight; i+=shopHeight/7) {
+        if (cookieCounter >= upgradePriceArray[i/(shopHeight/7)]) {
+          fill("white");
+        } else {
+          fill(160);
+        }
+        rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
+        buyButtonArray[floor(i/(shopHeight/7))].display();
+        displayText(shopLocation*2, shopLocation+i+10, upgradeItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
+        displayText(shopLocation*2, shopLocation+i+30, "Price: " + upgradePriceArray[i/(shopHeight/7)].toLocaleString(), 13, "black", LEFT, TOP);
+        displayText(shopLocation*2, shopLocation+i+45, upgradeDescriptionArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
       }
-      rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
-      buyButtonArray[floor(i/(shopHeight/7))].display();
-      displayText(shopLocation+10, shopLocation+i+10, upgradeItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
-      displayText(shopLocation+10, shopLocation+i+30, "Price: " + upgradePriceArray[i/(shopHeight/7)].toLocaleString(), 13, "black", LEFT, TOP);
-      displayText(shopLocation+10, shopLocation+i+45, upgradeDescriptionArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
+    }
+
+    //Second upgrade page
+    else {
+      for (let i=0; i<shopHeight; i+=shopHeight/7) {
+        if (cookieCounter >= secondUpgradePriceArray[i/(shopHeight/7)]) {
+          fill("white");
+        } else {
+          fill(160);
+        }
+        rect(shopLocation, shopLocation+i, shopWidth, shopHeight/7);
+        buyButtonArray[floor(i/(shopHeight/7))].display();
+        displayText(shopLocation*2, shopLocation+i+10, secondUpgradeItemArray[i/(shopHeight/7)], 16, "black", LEFT, TOP);
+        displayText(shopLocation*2, shopLocation+i+30, "Price: " + secondUpgradePriceArray[i/(shopHeight/7)].toLocaleString(), 13, "black", LEFT, TOP);
+        displayText(shopLocation*2, shopLocation+i+45, secondUpgradeDescriptionArray[i/(shopHeight/7)], 13, "black", LEFT, TOP);
+      }
     }
   }
 

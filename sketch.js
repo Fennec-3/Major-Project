@@ -67,7 +67,7 @@ function preload() { //loads images, music, and sounds
   downArrowImage = loadImage("./assets/Down_Arrow.png");
   clickedDownArrowImage = loadImage("./assets/Down_Arrow.png");
 
-  buySound = loadSound("./assets/Coins_Sound.mp3");
+  buySound = loadSound("./assets/Buy_Sound.mp3");
   popSound = loadSound("./assets/Pop_Sound.ogg");
   clickSound = loadSound("./assets/Click_Sound.mp3");
   cheatMusic = loadSound("./assets/Cheat_Music.mp3");

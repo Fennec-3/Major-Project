@@ -25,7 +25,7 @@ let totalCookiesSpent = 0;
 let timesClicked = 0;
 let buildingsPurchased = 0;
 let upgradesPurchased = 0;
-let statNameArray = ["Total Cookies Made: ", "Cookies Spent: ", "Times Clicked: ", "Buildings Purchased: ", "Upgrades Purchased: "];
+let statNameArray = ["Total Cookies Made: ", "Cookies Spent: ", "Times Clicked: ", "Buildings Purchased: ", "Upgrades Purchased: ", "Cookies Per Click: "];
 let statArray = [];
 let buyButtonArray = [];
 let shopItemArray = ["Cookie Oven", "Cookie Farm", "Cookie Mine", "Cookie Factory", "Cookie Embezzlement", "Cookie Laundering", "Cookie Corporation"];
@@ -173,7 +173,7 @@ function draw() { //displays buttons and text, adds cps, and saves items to loca
   storeItem("buildingsPurchased", buildingsPurchased);
   storeItem("upgradesPurchased", upgradesPurchased);
 
-  statArray = [totalCookiesMade, totalCookiesSpent, timesClicked, buildingsPurchased, upgradesPurchased];
+  statArray = [totalCookiesMade, totalCookiesSpent, timesClicked, buildingsPurchased, upgradesPurchased, cookiesPerClick];
 }
 
 function buyButtonSetup() { //creates the buy buttons for the shops

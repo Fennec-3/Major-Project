@@ -46,31 +46,31 @@ let upgradePriceMultiplier = 5;
 let instructions = "Welcome to Cookie Clicker! In this game, cookies are EVERYTHING, so get as many as you can by clicking the massive cookie  on your screen. Once you've made some cookies, use them to buy buildings from the Shop, these buildings will then make cookies for you on their own. Buy Upgrades to make your buildings more efficient."
 
 function preload() { //loads images, music, and sounds
-  cookieImage = loadImage("assets/Cookie.png");
-  clickedCookieImage = loadImage("assets/Cookie.png");
-  shopImage = loadImage("assets/Shop.png");
-  clickedShopImage = loadImage("assets/Shop.png");
-  buyImage = loadImage("assets/Buy_Button.png");
-  clickedBuyImage = loadImage("assets/Buy_Button.png");
-  upgradeImage = loadImage("assets/Upgrade_Button.png");
-  clickedUpgradeImage = loadImage("assets/Upgrade_Button.png");
-  playImage = loadImage("assets/Play_Button.png");
-  clickedPlayImage = loadImage("assets/Clicked_Play_Button.png");
-  newGameImage = loadImage("assets/New_Game_Button.png");
-  clickedNewGameImage = loadImage("assets/New_Game_Button.png");
-  cheatButtonImage = loadImage("assets/Pog_Champ.png");
-  clickedCheatImage = loadImage("assets/Pog_Champ.png");
-  statsImage = loadImage("assets/Stats_Image.png");
-  clickedStatsImage = loadImage("assets/Stats_Image.png");
-  upArrowImage = loadImage("assets/Up_Arrow.png");
-  clickedUpArrowImage = loadImage("assets/Up_Arrow.png");
-  downArrowImage = loadImage("assets/Down_Arrow.png");
-  clickedDownArrowImage = loadImage("assets/Down_Arrow.png");
+  cookieImage = loadImage("./assets/Cookie.png");
+  clickedCookieImage = loadImage("./assets/Cookie.png");
+  shopImage = loadImage("./assets/Shop.png");
+  clickedShopImage = loadImage("./assets/Shop.png");
+  buyImage = loadImage("./assets/Buy_Button.png");
+  clickedBuyImage = loadImage("./assets/Buy_Button.png");
+  upgradeImage = loadImage("./assets/Upgrade_Button.png");
+  clickedUpgradeImage = loadImage("./assets/Upgrade_Button.png");
+  playImage = loadImage("./assets/Play_Button.png");
+  clickedPlayImage = loadImage("./assets/Clicked_Play_Button.png");
+  newGameImage = loadImage("./assets/New_Game_Button.png");
+  clickedNewGameImage = loadImage("./assets/New_Game_Button.png");
+  cheatButtonImage = loadImage("./assets/Pog_Champ.png");
+  clickedCheatImage = loadImage("./assets/Pog_Champ.png");
+  statsImage = loadImage("./assets/Stats_Image.png");
+  clickedStatsImage = loadImage("./assets/Stats_Image.png");
+  upArrowImage = loadImage("./assets/Up_Arrow.png");
+  clickedUpArrowImage = loadImage("./assets/Up_Arrow.png");
+  downArrowImage = loadImage("./assets/Down_Arrow.png");
+  clickedDownArrowImage = loadImage("./assets/Down_Arrow.png");
 
-  buySound = loadSound("assets/Coins_sound.mp3");
-  popSound = loadSound("assets/Pop_sound.ogg");
-  clickSound = loadSound("assets/Click_sound.mp3");
-  cheatMusic = loadSound("assets/cheat_music.mp3");
+  buySound = loadSound("./assets/Coins_Sound.mp3");
+  popSound = loadSound("./assets/Pop_Sound.ogg");
+  clickSound = loadSound("./assets/Click_Sound.mp3");
+  cheatMusic = loadSound("./assets/Cheat_Music.mp3");
 }
 
 function setup() { //resizes images, sets buttons and shop size, loads save data

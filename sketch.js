@@ -3,7 +3,8 @@
 // 11/17/2021
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// - Local storage
+// - I drew all the buttons myself (except for pog champ)
 //
 //resizeNN isn't my creation I found it here: https://gist.github.com/GoToLoop/2e12acf577506fd53267e1d186624d7c
 
@@ -74,6 +75,7 @@ function preload() { //loads images, music, and sounds
 }
 
 function setup() { //resizes images, sets buttons and shop size, loads save data
+  //setting shop size
   createCanvas(windowWidth, windowHeight);
   minHeightWidth = min(height, width);
   shopWidth = width/5;
@@ -252,7 +254,7 @@ function mousePressed() { //this determines what happens when you interact with 
       popSound.play();
     }
 
-    if (upArrowButton.mouseDetected() && (isShop || isUpgrade)) {
+    if (upArrowButton.mouseDetected() && (isShop || isUpgrade)) { //displays first shop page
       upArrowButton.buttonPressed();
       if (isShop) {
         secondShopPage = false;
@@ -262,7 +264,7 @@ function mousePressed() { //this determines what happens when you interact with 
       clickSound.play();
     }
 
-    if (downArrowButton.mouseDetected() && (isShop || isUpgrade)) {
+    if (downArrowButton.mouseDetected() && (isShop || isUpgrade)) { //displays second shop page
       downArrowButton.buttonPressed();
       if (isShop) {
         secondShopPage = true;
@@ -342,21 +344,22 @@ function displayInstructions() { //displays instructions message on title screen
   rect(shopLocation, height-(shopHeight/2.5 + shopLocation), shopWidth, shopHeight/2.5);
 
   //text
-  noStroke();
-  textSize(minHeightWidth/46);
-  fill(255);
-  textWrap(WORD);
-  text(instructions, shopLocation*2, height-(shopHeight/2.5), shopWidth-shopLocation);
+  displayText(shopLocation*2, height-(shopHeight/2.5), instructions, minHeightWidth/46, "white", LEFT, TOP, shopWidth-shopLocation);
   pop();
 }
 
-function displayText(x, y, words, sizeOfText, theColor, horiAlign, vertiAlign) { //displays text
+function displayText(x, y, words, sizeOfText, theColor, horiAlign, vertiAlign, wrapWidth) { //displays text
   push();
+  noStroke();
   fill(theColor);
-  strokeWeight(0);
   textAlign(horiAlign, vertiAlign);
   textSize(sizeOfText);
-  text(words, x, y);
+  if (wrapWidth === null) {
+    text(words, x, y);
+  } else {
+    textWrap(WORD);
+    text(words, x, y, wrapWidth);
+  }
   pop();
 }
 
@@ -438,11 +441,11 @@ function openWindow() { //opens a window when a button is pressed
     }
   }
 
-  if (isStats) {
+  if (isStats) { //opens stat window
     strokeWeight(10);
     stroke(220);
     fill("white");
-    rect(shopLocation, shopLocation, shopWidth, shopHeight/4);
+    rect(shopLocation, shopLocation, shopWidth, shopHeight/3.5);
     for (let i=0; i<statArray.length; i++) {
       displayText(shopLocation+10, shopLocation/2+(i+1)*20, statNameArray[i]+floor(statArray[i]).toLocaleString(), 13, "black", LEFT, TOP);
     }
